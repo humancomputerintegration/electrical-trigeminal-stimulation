@@ -1,0 +1,363 @@
+%!Adobe-FontList 1.11
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:CID
+FontName:AdobeHeitiStd-Regular
+FamilyName:Adobe Heiti Std
+StyleName:R
+FullName:Adobe Heiti Std R
+MenuName:Adobe Heiti Std R
+StyleBits:0
+FamilyNameNative:Adobe 黑体 Std
+StyleNameNative:R
+FullNameNative:Adobe 黑体 Std R
+WritingScript:SimplifiedChinese
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\AdobeHeitiStd-Regular.otf
+DataFormat:sfntData
+isCFF:yes
+FileLength:12266264
+FileModTime:1266574182
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:CID
+FontName:AdobeMingStd-Light
+FamilyName:Adobe Ming Std
+StyleName:L
+FullName:Adobe Ming Std L
+MenuName:Adobe Ming Std L
+StyleBits:0
+FamilyNameNative:Adobe 明體 Std
+StyleNameNative:L
+FullNameNative:Adobe 明體 Std L
+WritingScript:TraditionalChinese
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\AdobeMingStd-Light.otf
+DataFormat:sfntData
+isCFF:yes
+FileLength:10149768
+FileModTime:1266574276
+WeightClass:300
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:CID
+FontName:AdobeMyungjoStd-Medium
+FamilyName:Adobe Myungjo Std
+StyleName:M
+FullName:Adobe Myungjo Std M
+MenuName:Adobe Myungjo Std M
+StyleBits:0
+FamilyNameNative:Adobe 명조 Std
+StyleNameNative:M
+FullNameNative:Adobe 명조 Std M
+WritingScript:Korean
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\AdobeMyungjoStd-Medium.otf
+DataFormat:sfntData
+isCFF:yes
+FileLength:3999324
+FileModTime:1266574314
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobePiStd
+FamilyName:Adobe Pi Std
+StyleName:Regular
+FullName:Adobe Pi Std
+MenuName:Adobe Pi Std
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\AdobePiStd.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:89660
+FileModTime:1266574316
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:CID
+FontName:AdobeSongStd-Light
+FamilyName:Adobe Song Std
+StyleName:L
+FullName:Adobe Song Std L
+MenuName:Adobe Song Std L
+StyleBits:0
+FamilyNameNative:Adobe 宋体 Std
+StyleNameNative:L
+FullNameNative:Adobe 宋体 Std L
+WritingScript:SimplifiedChinese
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\AdobeSongStd-Light.otf
+DataFormat:sfntData
+isCFF:yes
+FileLength:15588124
+FileModTime:1266574438
+WeightClass:300
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CourierStd-Bold
+FamilyName:Courier Std
+StyleName:Bold
+FullName:Courier Std Bold
+MenuName:Courier Std
+StyleBits:2
+WritingScript:Roman
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\CourierStd-Bold.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:36520
+FileModTime:1266574438
+WeightClass:700
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CourierStd-BoldOblique
+FamilyName:Courier Std
+StyleName:Bold Oblique
+FullName:Courier Std Bold Oblique
+MenuName:Courier Std
+StyleBits:3
+WritingScript:Roman
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\CourierStd-BoldOblique.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:37852
+FileModTime:1266574440
+WeightClass:700
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CourierStd-Oblique
+FamilyName:Courier Std
+StyleName:Medium Oblique
+FullName:Courier Std Medium Oblique
+MenuName:Courier Std
+StyleBits:1
+WritingScript:Roman
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\CourierStd-Oblique.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:38152
+FileModTime:1266574440
+WeightClass:500
+WidthClass:5
+AngleClass:1
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:CourierStd
+FamilyName:Courier Std
+StyleName:Medium
+FullName:Courier Std Medium
+MenuName:Courier Std
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\CourierStd.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:36732
+FileModTime:1266574440
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:CID
+FontName:KozGoPr6N-Medium
+FamilyName:Kozuka Gothic Pr6N
+StyleName:M
+FullName:Kozuka Gothic Pr6N M
+MenuName:Kozuka Gothic Pr6N M
+StyleBits:0
+FamilyNameNative:小塚ゴシック Pr6N
+StyleNameNative:M
+FullNameNative:小塚ゴシック Pr6N M
+WritingScript:Japanese
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\KozGoPr6N-Medium.otf
+DataFormat:sfntData
+isCFF:yes
+FileLength:5500008
+FileModTime:1266574462
+WeightClass:500
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:CID
+FontName:KozMinPr6N-Regular
+FamilyName:Kozuka Mincho Pr6N
+StyleName:R
+FullName:Kozuka Mincho Pr6N R
+MenuName:Kozuka Mincho Pr6N R
+StyleBits:0
+FamilyNameNative:小塚明朝 Pr6N
+StyleNameNative:R
+FullNameNative:小塚明朝 Pr6N R
+WritingScript:Japanese
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\KozMinPr6N-Regular.otf
+DataFormat:sfntData
+isCFF:yes
+FileLength:8135788
+FileModTime:1266574498
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Symbol
+FamilyName:Symbol
+StyleName:Regular
+FullName:Symbol
+MenuName:Symbol
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\sy______.pfb
+DataFormat:Plain
+UsesStandardEncoding:no
+isCFF:no
+FileLength:34705
+FileModTime:1266574498
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:Symbol
+NumMMAxes:0
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\sy______.pfm
+FileLength:672
+FileModTime:1266574498
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:AdobeSansMM
+NumMMAxes:2
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\zx______.mmm
+FileLength:7248
+FileModTime:1266574498
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeSansMM
+FamilyName:Adobe Sans MM
+StyleName:Regular
+FullName:Adobe Sans MM
+MenuName:AdobeSanMM
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\zx______.pfb
+DataFormat:Plain
+MMAxisName:Weight
+MMAxisName:Width
+UsesStandardEncoding:yes
+isCFF:no
+FileLength:75573
+FileModTime:1266574498
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:AdobeSansMM
+NumMMAxes:0
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\zx______.pfm
+FileLength:683
+FileModTime:1266574498
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:AdobeSerifMM
+NumMMAxes:2
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\zy______.mmm
+FileLength:7248
+FileModTime:1266574498
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeSerifMM
+FamilyName:Adobe Serif MM
+StyleName:Regular
+FullName:Adobe Serif MM
+MenuName:AdobeSerMM
+StyleBits:0
+WritingScript:Roman
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\zy______.pfb
+DataFormat:Plain
+MMAxisName:Weight
+MMAxisName:Width
+UsesStandardEncoding:yes
+isCFF:no
+FileLength:96418
+FileModTime:1266574500
+WeightClass:400
+WidthClass:5
+AngleClass:0
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:PFM
+FontName:AdobeSerifMM
+NumMMAxes:0
+OutlineFileName:d:\Dev\pdflibs\Adobe\PDFLSDK9.2\Resource\Font\zy______.pfm
+FileLength:684
+FileModTime:1266574500
+%EndFont
+
