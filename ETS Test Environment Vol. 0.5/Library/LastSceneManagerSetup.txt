@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/ETS Enviroment.unity
-  isLoaded: 1
-  isActive: 1
