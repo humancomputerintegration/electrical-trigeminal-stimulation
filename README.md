@@ -1,20 +1,25 @@
 # Electrical Trigeminal Stimulation
 
-Hi Jas, this is the very beginning version of our unity environment. I'll explain to you how it works.
+This is a repository for the prototype electrical trigeminal stimulator and accompanying Unity files in the "PAPER TITLE HERE" paper. The device is an intra-nasal (in-nose) functional electrical stimulator, which can render simple electrical pulses to the nose's trigeminal nerve-endings.
 
+## Repository Structure
 
+* `c-Study01-RehaMove` contains all the C files to run the paper's first user study. To run the study, you would need a RehaMove.
+* `unity-Study02-DesktopVR` contains all the Unity files to run the paper's second user study. The code features thorough comments and further explanation below. To actually run the study, you would need a RehaMove.
+* `rehamove-adapter` contains 3D printing files and instructions to make a nose clip adapter for the RehaMove.
+* `stimulator` contains the schematics, 3D printing files, bill of materials, and instructions to assemble the electrical trigeminal stimulator.
 
 ## Unity Scene
 
-### About the environment
+### Environment
 
 As we may develop this environment for out VR test in the future, I make it in the form of first person . So that we just need to replace the controller part with real VR-glasses tracking data in the next step. For the current version, if you open the project in Unity and look into the scene, you can see a little red player in the center of the game world and the main camera is at the position of its eyes. We'll regard the movement (position and rotation) of this camera as the movement of future subjects' noses. There are some other objects in the environment like stairs and boxes. They are just for checking the correctness of the movement log. You can check it by move the player yourself and try mapping the movement with the log file created after the application quits.
 
-### About the game controls
+### Game controls
 
 The controls of the game is very simple, just like most of the First Person Shooting games. you can use your mouse to see around (change the rotation) and use "WASD" and the Space on your keyboard to move the player (change the position).
 
-### About the movement log
+### Movement log
 
 Basically the script that moves the player also records the movement with a log frequency, which is one record for every 10 frames by default. After the whole application quits, these records will be written into the file called *MovementLog.txt* in the following format:
 
