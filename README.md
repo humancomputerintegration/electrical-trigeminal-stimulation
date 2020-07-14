@@ -4,7 +4,7 @@ This is a repository for the prototype electrical trigeminal stimulator and acco
 
 ## Repository Structure
 
-* `cpp-Study01-RehaMove` contains all the C files to run the paper's first user study. To run the study, you would need a RehaMove.
+* `cpp-Study01-RehaMove` contains all the C files to run the paper's first user study. To run the study, you would need a RehaMove. This builds off of the [Rehamove Integration Library](https://github.com/humancomputerintegration/rehamove-integration-lib).
 * `unity-Study02-DesktopVR` contains all the Unity files to run the paper's second user study. The code features thorough comments and further explanation below. To actually run the study, you would need a RehaMove.
 * `rehamove-adapter` contains 3D printing files and instructions to make a nose clip adapter for the RehaMove.
 * `stimulator` contains the schematics, 3D printing files, bill of materials, and instructions to assemble the electrical trigeminal stimulator.
