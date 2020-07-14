@@ -6,14 +6,19 @@ This is a repository for the prototype electrical trigeminal stimulator and acco
 
 * `cpp-Study01-RehaMove` contains all the C files to run the paper's first user study. To run the study, you would need a RehaMove. This builds off of the [Rehamove Integration Library](https://github.com/humancomputerintegration/rehamove-integration-lib).
 * `unity-Study02-DesktopVR` contains all the Unity files to run the paper's second user study. The code features thorough comments and further explanation below. To actually run the study, you would need a RehaMove.
+* `ansys-Study02-Simulation` contains all Ansys files to run the computational fluid simulation for the paper's second user study.
 * `rehamove-adapter` contains 3D printing files and instructions to make a nose clip adapter for the RehaMove.
 * `stimulator` contains the schematics, 3D printing files, bill of materials, and instructions to assemble the electrical trigeminal stimulator.
+
+## Device
+
+
 
 ## Unity Scene
 
 ### Environment
 
-As we may develop this environment for out VR test in the future, I make it in the form of first person . So that we just need to replace the controller part with real VR-glasses tracking data in the next step. For the current version, if you open the project in Unity and look into the scene, you can see a little red player in the center of the game world and the main camera is at the position of its eyes. We'll regard the movement (position and rotation) of this camera as the movement of future subjects' noses. There are some other objects in the environment like stairs and boxes. They are just for checking the correctness of the movement log. You can check it by move the player yourself and try mapping the movement with the log file created after the application quits.
+As we may develop this environment for out VR test in the future, I make it in the form of first person. So that we just need to replace the controller part with real VR-glasses tracking data in the next step. For the current version, if you open the project in Unity and look into the scene, you can see a little red player in the center of the game world and the main camera is at the position of its eyes. We'll regard the movement (position and rotation) of this camera as the movement of future subjects' noses. There are some other objects in the environment like stairs and boxes. They are just for checking the correctness of the movement log. You can check it by move the player yourself and try mapping the movement with the log file created after the application quits.
 
 ### Game controls
 
