@@ -91,7 +91,7 @@ public class AnsysPlume : MonoBehaviour
     private void DrawPlume(ArrayList drawList)
     {
         var main = plumeRenderer.main;
-        main.startSpeed = 0.0f;
+        main.startSpeed = 0.00001f;
         main.startLifetime = 1000.0f;
 
         pointCnt = drawList.Count;
