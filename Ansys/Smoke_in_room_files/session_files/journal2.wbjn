@@ -1,0 +1,2534 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+system1 = GetSystem(Name="CFX 3")
+geometry1 = system1.GetContainer(ComponentName="Geometry")
+geometry1.Edit()
+geometry1.Exit()
+geometry1.Edit()
+geometry1.Exit()
+solution1 = system1.GetContainer(ComponentName="Solution")
+solution1.Exit()
+setup1 = system1.GetContainer(ComponentName="Setup")
+setup1.Edit()
+setup1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.52602, 0
+    Scale = 0.151515
+    Pan = 0, 0
+    Rotation Quaternion = -4.32978e-17, 0.707107, 0.707107, 4.32978e-17
+    
+  END
+
+END
+
+> update
+FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = 10 [min]
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = 10 [min]
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+ExpFunction=FinalConcentration*abs(1-exp(-t/TimeConst))
+END
+END
+END""")
+Save(Overwrite=True)
+setup1.Exit()
+solutionComponent1 = system1.GetComponent(Name="Solution")
+solutionComponent1.Refresh()
+resultsComponent1 = system1.GetComponent(Name="Results")
+resultsComponent1.Reset()
+solutionComponent1.Reset()
+solution1.SetExecutionControl(CCL=r"""&replace SIMULATION CONTROL:
+  EXECUTION CONTROL:
+    EXECUTABLE SELECTION:
+      Double Precision = Off
+      Large Problem = Off
+    END
+    INTERPOLATOR STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+    END
+    PARTITIONER STEP CONTROL:
+      Multidomain Option = Automatic
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARTITION SMOOTHING:
+        Maximum Partition Smoothing Sweeps = 100
+        Option = Smooth
+      END
+      PARTITIONING TYPE:
+        MeTiS Type = k-way
+        Option = MeTiS
+        Partition Size Rule = Automatic
+      END
+    END
+    RUN DEFINITION:
+      Run Mode = Full
+      Solver Input File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-3\CFX\Smoke Moving Person.def
+    END
+    SOLVER STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARALLEL ENVIRONMENT:
+        Number of Processes = 6
+        Start Method = Intel MPI Local Parallel
+      END
+    END
+  END
+END
+""")
+solutionComponent1.Update(Force=True)
+solution1.Exit()
+resultsComponent1.Update(AllDependencies=True)
+results1 = system1.GetContainer(ComponentName="Results")
+results1.Edit()
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case Smoke Moving Person/BOUNDARY:pipeVent Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case Smoke Moving Person/BOUNDARY:pipeVent Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case Smoke Moving Person/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case Smoke Moving Person/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case Smoke Moving Person/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="> autolegend plot=/VOLUME RENDERING:Volume Rendering 1, view=VIEW:View 1")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = Off
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Use Plot Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Global
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Global
+Volume Rendering Scale = Linear
+Volume Resolution = 20
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command=r"""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.0320515, -0.934512, -0.341572, 0.0948354
+    
+  END
+
+END
+
+> update
+DATA READER:
+  Active Case Name = Case Smoke Moving Person
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-3\CFX\Smoke Moving Person_001.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-3\CFX\Smoke Moving Person_001.res
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END""")
+results1.SendCommand(Command="> load timestep=536")
+results1.SendCommand(Command="> load timestep=496")
+results1.SendCommand(Command="> load timestep=439")
+results1.SendCommand(Command="> load timestep=369")
+results1.SendCommand(Command="> load timestep=308")
+results1.SendCommand(Command="> load timestep=249")
+results1.SendCommand(Command="> load timestep=195")
+results1.SendCommand(Command="> load timestep=136")
+results1.SendCommand(Command="> load timestep=83")
+results1.SendCommand(Command="> load timestep=27")
+results1.SendCommand(Command="> load timestep=13")
+results1.SendCommand(Command="> load timestep=5")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = Off
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Use Plot Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Global
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Global
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = Off
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Use Plot Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = Off
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = Chrome
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = Brushed Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="> load timestep=25")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="> load timestep=45")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.0603307, -0.931213, -0.358876, 0.0204511
+    
+  END
+
+END
+
+> update
+> load timestep=64""")
+results1.SendCommand(Command="> load timestep=85")
+results1.SendCommand(Command="> load timestep=104")
+results1.SendCommand(Command="> load timestep=122")
+results1.SendCommand(Command="> load timestep=163")
+results1.SendCommand(Command="> load timestep=185")
+results1.SendCommand(Command="> load timestep=221")
+results1.SendCommand(Command="> load timestep=261")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.145442, -0.908621, -0.29364, 0.25892
+    
+  END
+
+END
+
+> update
+> load timestep=282""")
+results1.SendCommand(Command="> load timestep=301")
+results1.SendCommand(Command="> load timestep=322")
+results1.SendCommand(Command="> load timestep=361")
+results1.SendCommand(Command="> load timestep=400")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.280739, -0.740036, -0.123768, 0.598518
+    
+  END
+
+END
+
+> update
+> load timestep=421""")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = -0.0837246, -0.915782, -0.289962, -0.265067
+    
+  END
+
+END
+
+> update
+> load timestep=0""")
+results1.SendCommand(Command="""ANIMATION:ANIMATION
+QAnim MPEG Filename = C:/Users/Muphy/Documents/Smoke Moving Person.wmv
+QAnim Save MPEG = Off
+QAnim Looping = Bounce
+QAnim Looping Cycles = 1
+Video Format = wmv
+
+END""")
+results1.SendCommand(Command="""DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case Smoke Moving Person
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = C:/Users/Muphy/Documents/Smoke Moving Person.wmv
+TimeAnim Save MPEG = Off
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END""")
+results1.SendCommand(Command="""DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case Smoke Moving Person
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = C:/Users/Muphy/Documents/Smoke Moving Person.wmv
+TimeAnim Save MPEG = On
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END""")
+results1.SendCommand(Command="""DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case Smoke Moving Person
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min.wmv
+TimeAnim Save MPEG = On
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END""")
+results1.SendCommand(Command="""DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case Smoke Moving Person
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min.wmv
+TimeAnim Save MPEG = On
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END
+>animate timestepAnimate""")
+results1.SendCommand(Command=r"""DATA READER:
+  Active Case Name = Case Smoke Moving Person
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-3\CFX\Smoke Moving Person_001.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-3\CFX\Smoke Moving Person_001.res
+END
+DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case Smoke Moving Person
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min.wmv
+TimeAnim Save MPEG = On
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END
+>load timestep=0""")
+results1.SendCommand(Command="""DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case Smoke Moving Person
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min.wmv
+TimeAnim Save MPEG = On
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 50
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="> load timestep=29")
+results1.SendCommand(Command="> load timestep=53")
+results1.SendCommand(Command="> load timestep=74")
+results1.SendCommand(Command="> load timestep=96")
+results1.SendCommand(Command="> load timestep=158")
+results1.SendCommand(Command="> load timestep=222")
+results1.SendCommand(Command="> load timestep=285")
+results1.SendCommand(Command="> load timestep=348")
+results1.SendCommand(Command="> load timestep=389")
+results1.SendCommand(Command="> load timestep=431")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 70
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 90
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 70
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command=r"""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.181964
+    Pan = 0, 0
+    Rotation Quaternion = -0.0837246, -0.915782, -0.289962, -0.265067
+    
+  END
+
+END
+
+> update
+DATA READER:
+  Active Case Name = Case Smoke Moving Person
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-3\CFX\Smoke Moving Person_001.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-3\CFX\Smoke Moving Person_001.res
+END
+DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case Smoke Moving Person
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min.wmv
+TimeAnim Save MPEG = On
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END
+>load timestep=0""")
+results1.SendCommand(Command="""DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case Smoke Moving Person
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min.wmv
+TimeAnim Save MPEG = On
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END
+>animate timestepAnimate""")
+results1.SendCommand(Command="> load timestep=0")
+results1.SendCommand(Command="> load timestep=1")
+results1.SendCommand(Command="> load timestep=2")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/2.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=3")
+results1.SendCommand(Command="> load timestep=12")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/12.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=22")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/22.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=32")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/32.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=42")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/42.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=52")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/52.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=62")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/62.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=72")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/72.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=82")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/82.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=92")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/92.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=102")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/102.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=112")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/112.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=122")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/122.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=132")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/132.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=142")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/142.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=152")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/152.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=162")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/162.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=172")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/172.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=182")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/182.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=192")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/192.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=202")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/202.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=212")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/212.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=222")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/222.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=232")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/232.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=242")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/242.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=252")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/252.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=262")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/262.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=272")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/272.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=282")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/282.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=292")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/292.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=302")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/302.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=312")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/312.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=322")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/322.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=332")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/332.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=342")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/342.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=352")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/352.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command="> load timestep=360")
+results1.SendCommand(Command="> load timestep=362")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case Smoke Moving Person
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/10min_a/362.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = smoke
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.Exit()
+system1.Copy(KeepConnections=True)
+system2 = GetSystem(Name="CFX 4")
+geometry2 = system2.GetContainer(ComponentName="Geometry")
+geometry2.Edit()
+geometry2.Exit()
+system2.Delete()
+system1.Copy(KeepConnections=True)
+system3 = GetSystem(Name="CFX 4")
+geometry3 = system3.GetContainer(ComponentName="Geometry")
+geometry3.Edit()
+geometry3.Exit()
+geometry3.Edit()
+Save(Overwrite=True)
+Save(Overwrite=True)

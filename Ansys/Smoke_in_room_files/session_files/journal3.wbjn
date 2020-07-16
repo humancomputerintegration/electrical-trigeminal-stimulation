@@ -1,0 +1,2019 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+system1 = GetSystem(Name="CFX 4")
+geometry1 = system1.GetContainer(ComponentName="Geometry")
+geometry1.Edit()
+geometry1.Exit()
+system2 = system1.Duplicate(
+    ComponentsToShare=[],
+    RelativeTo=system1)
+meshComponent1 = system1.GetComponent(Name="Mesh")
+meshComponent1.Refresh()
+mesh1 = system1.GetContainer(ComponentName="Mesh")
+mesh1.Edit()
+Save(Overwrite=True)
+mesh1.Exit()
+meshComponent1.Update(AllDependencies=True)
+setup1 = system1.GetContainer(ComponentName="Setup")
+setup1.Edit()
+setup1.Exit()
+solution1 = system1.GetContainer(ComponentName="Solution")
+solution1.SetExecutionControl(CCL=r"""&replace SIMULATION CONTROL:
+  EXECUTION CONTROL:
+    EXECUTABLE SELECTION:
+      Double Precision = Off
+      Large Problem = Off
+    END
+    INTERPOLATOR STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+    END
+    PARTITIONER STEP CONTROL:
+      Multidomain Option = Automatic
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARTITION SMOOTHING:
+        Maximum Partition Smoothing Sweeps = 100
+        Option = Smooth
+      END
+      PARTITIONING TYPE:
+        MeTiS Type = k-way
+        Option = MeTiS
+        Partition Size Rule = Automatic
+      END
+    END
+    RUN DEFINITION:
+      Run Mode = Full
+      Solver Input File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person.def
+    END
+    SOLVER STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARALLEL ENVIRONMENT:
+        Number of Processes = 6
+        Start Method = Intel MPI Local Parallel
+      END
+    END
+  END
+END
+""")
+solutionComponent1 = system1.GetComponent(Name="Solution")
+solutionComponent1.Update(Force=True)
+solution1.Exit()
+resultsComponent1 = system1.GetComponent(Name="Results")
+resultsComponent1.Update(AllDependencies=True)
+results1 = system1.GetContainer(ComponentName="Results")
+results1.Edit()
+results1.SendCommand(Command="""VIEW:View 1
+  Light Angle = 50, 110
+END
+
+VIEW:View 2
+  Light Angle = 50, 110
+END
+
+VIEW:View 3
+  Light Angle = 50, 110
+END
+
+VIEW:View 4
+  Light Angle = 50, 110
+END
+
+> update
+# Sending visibility action from ViewUtilities
+>hide /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="> autolegend plot=/VOLUME RENDERING:Volume Rendering 1, view=VIEW:View 1")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:pipeVent Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:pipeVent Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="> autolegend plot=/VOLUME RENDERING:Volume Rendering 1, view=VIEW:View 1")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = pipeVent
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 70
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Immersed Solids
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 70
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 70
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.181964
+    Pan = 0, 0
+    Rotation Quaternion = -0.133261, -0.871283, -0.257276, -0.396136
+    
+  END
+
+END
+
+> update
+# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:pipeVent Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:pipeVent Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 70
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = person
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Line Colour = 0, 0, 0
+Line Colour Mode = Default
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Local
+Render Edge Angle = 0 [degree]
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = smoke
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Local
+Volume Rendering Scale = Linear
+Volume Resolution = 70
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case Copy of Smoke Moving Person/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="> delete /VOLUME RENDERING:Volume Rendering 1")
+results1.SendCommand(Command="> autolegend plot=/PARTICLE TRACK:Particle Track 1, view=VIEW:View 1")
+results1.SendCommand(Command="""PARTICLE TRACK:Particle Track 1
+Activate Filter = Off
+Any All Condition = Match ALL
+Apply Instancing Transform = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Draw Symbols = Off
+Draw Tracks = On
+Filter On Diameter = Off
+Filter On End = Off
+Filter On Start = Off
+Filter On Track Selection = Off
+Font = Sans Serif
+Input File =  
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = On
+Limit Track Option = Up To Current Timestep
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Maximum Number of Tracks = 25
+Min = 0.0 [kg m^-3]
+Number of Sides = 8
+Option = From File
+Particle Diameter = 0 [m]
+Particle Diameter Condition = gt
+Particle Diameter Condition Two = NA
+Particle Diameter Two = 0 [m]
+Range = Global
+Reduction Factor = 1.0
+Reduction or Max Tracks = Max Tracks
+Show Track Labels = Off
+Specular Lighting = On
+Surface Drawing = Smooth Shading
+Symbol Max Time Selection = User Specified
+Symbol Scale Type = Relative
+Symbol Size = 1.0
+Symbol Size Option = Constant
+Symbol Start Time = 10.0 [s]
+Symbol Stop Time = -10.0 [s]
+Symbol Time Interval = 1.0 [s]
+Text Colour = 0, 0, 0
+Text Colour Mode = Default
+Text Height = 0.024
+Track Drawing Mode = Line
+Track End Distance = 0.0 [m]
+Track End Time = 0.0 [s]
+Track File Type = CFX4
+Track Limit Type = Time
+Track Line Width = 2
+Track Size = 1.0
+Track Start Distance = 0.0 [m]
+Track Start Time = 0.0 [s]
+Track Symbol = Ball
+Transparency = 0.0
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /PARTICLE TRACK:Particle Track 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="> autolegend plot=/STREAMLINE:Streamline 1, view=VIEW:View 1")
+results1.SendCommand(Command="""STREAMLINE:Streamline 1
+Absolute Tolerance = 0.0 [m]
+Apply Instancing Transform = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Use Plot Variable
+Colour Scale = Linear
+Colour Variable = Velocity
+Colour Variable Boundary Values = Conservative
+Cross Periodics = On
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Draw Streams = On
+Draw Symbols = Off
+Grid Tolerance = 0.01
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = On
+Line Width = 1
+Locator Sampling Method = Equally Spaced
+Max = 0.0 [m s^-1]
+Maximum Number of Items = 25
+Min = 0.0 [m s^-1]
+Number of Samples = 25
+Number of Sides = 8
+Range = Global
+Reduction Factor = 1.0
+Reduction or Max Number = Max Number
+Sample Spacing = 0.1
+Sampling Aspect Ratio = 1
+Sampling Grid Angle = 0 [degree]
+Seed Point Type = Equally Spaced Samples
+Simplify Geometry = Off
+Specular Lighting = On
+Stream Drawing Mode = Line
+Stream Initial Direction = 0 , 0 , 0 
+Stream Size = 1.0
+Stream Symbol = Ball
+Streamline Direction = Forward
+Streamline Maximum Periods = 20
+Streamline Maximum Segments = 10000
+Streamline Maximum Time = 0.0 [s]
+Streamline Type = 3D Streamline
+Streamline Width = 2
+Surface Drawing = Smooth Shading
+Surface Streamline Direction = Forward and Backward
+Symbol Size = 1.0
+Symbol Start Time = 10.0 [s]
+Symbol Stop Time = -10.0 [s]
+Symbol Time Interval = 1.0 [s]
+Tolerance Mode = Grid Relative
+Transparency = 0.0
+Variable = Velocity
+Variable Boundary Values = Conservative
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /STREAMLINE:Streamline 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="> autolegend plot=/PARTICLE TRACK:Particle Track 1, view=VIEW:View 1")
+results1.SendCommand(Command="""PARTICLE TRACK:Particle Track 1
+Activate Filter = Off
+Any All Condition = Match ALL
+Apply Instancing Transform = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = smoke
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Draw Symbols = Off
+Draw Tracks = On
+Filter On Diameter = Off
+Filter On End = Off
+Filter On Start = Off
+Filter On Track Selection = Off
+Font = Sans Serif
+Input File =  
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = On
+Limit Track Option = Up To Current Timestep
+Line Width = 1
+Max = 0.0 [kg m^-3]
+Maximum Number of Tracks = 25
+Min = 0.0 [kg m^-3]
+Number of Sides = 8
+Option = From File
+Particle Diameter = 0 [m]
+Particle Diameter Condition = gt
+Particle Diameter Condition Two = NA
+Particle Diameter Two = 0 [m]
+Range = Global
+Reduction Factor = 1.0
+Reduction or Max Tracks = Max Tracks
+Show Track Labels = Off
+Specular Lighting = On
+Surface Drawing = Smooth Shading
+Symbol Max Time Selection = User Specified
+Symbol Scale Type = Relative
+Symbol Size = 1.0
+Symbol Size Option = Constant
+Symbol Start Time = 10.0 [s]
+Symbol Stop Time = -10.0 [s]
+Symbol Time Interval = 1.0 [s]
+Text Colour = 0, 0, 0
+Text Colour Mode = Default
+Text Height = 0.024
+Track Drawing Mode = Line
+Track End Distance = 0.0 [m]
+Track End Time = 0.0 [s]
+Track File Type = CFX4
+Track Limit Type = Time
+Track Line Width = 2
+Track Size = 1.0
+Track Start Distance = 0.0 [m]
+Track Start Time = 0.0 [s]
+Track Symbol = Ball
+Transparency = 0.0
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /PARTICLE TRACK:Particle Track 1, view=/VIEW:View 1""")
+results1.Exit()
+system3 = GetSystem(Name="CFX 3")
+results2 = system3.GetContainer(ComponentName="Results")
+results2.Edit()
+results2.SendCommand(Command="""VIEW:View 1
+  Light Angle = 50, 110
+END
+
+VIEW:View 2
+  Light Angle = 50, 110
+END
+
+VIEW:View 3
+  Light Angle = 50, 110
+END
+
+VIEW:View 4
+  Light Angle = 50, 110
+END
+
+> update
+> autolegend plot=/VOLUME RENDERING:Volume Rendering 1, view=VIEW:View 1""")
+results2.Exit()
+system3.Copy(KeepConnections=True)
+system4 = GetSystem(Name="CFX 6")
+system4.Delete()
+system2.Delete()
+system1.Delete()
+system5 = system3.Duplicate(
+    ComponentsToShare=[],
+    RelativeTo=system3)
+setup2 = system5.GetContainer(ComponentName="Setup")
+setup2.Edit()
+setup2.Exit()
+solution2 = system5.GetContainer(ComponentName="Solution")
+solution2.SetExecutionControl(CCL=r"""&replace SIMULATION CONTROL:
+  EXECUTION CONTROL:
+    EXECUTABLE SELECTION:
+      Double Precision = Off
+      Large Problem = Off
+    END
+    INTERPOLATOR STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+    END
+    PARTITIONER STEP CONTROL:
+      Multidomain Option = Automatic
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARTITION SMOOTHING:
+        Maximum Partition Smoothing Sweeps = 100
+        Option = Smooth
+      END
+      PARTITIONING TYPE:
+        MeTiS Type = k-way
+        Option = MeTiS
+        Partition Size Rule = Automatic
+      END
+    END
+    RUN DEFINITION:
+      Run Mode = Full
+      Solver Input File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person.def
+    END
+    SOLVER STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARALLEL ENVIRONMENT:
+        Number of Processes = 6
+        Start Method = Intel MPI Local Parallel
+      END
+    END
+  END
+END
+""")
+solutionComponent2 = system5.GetComponent(Name="Solution")
+solutionComponent2.Update(Force=True)
+solution2.Exit()
+resultsComponent2 = system5.GetComponent(Name="Results")
+resultsComponent2.Update(AllDependencies=True)
+results3 = system5.GetContainer(ComponentName="Results")
+results3.Edit()
+results3.SendCommand(Command="> autolegend plot=/VOLUME RENDERING:Volume Rendering 1, view=VIEW:View 1")
+results3.SendCommand(Command=r"""DATA READER:
+  Active Case Name = Case Copy of Smoke Moving Person
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person_001.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person_001.res
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END""")
+results3.SendCommand(Command="> load timestep=342")
+results3.SendCommand(Command="> load timestep=325")
+results3.SendCommand(Command="> load timestep=292")
+results3.SendCommand(Command="> load timestep=262")
+results3.SendCommand(Command="> load timestep=243")
+results3.SendCommand(Command="> load timestep=212")
+results3.SendCommand(Command="> load timestep=192")
+results3.SendCommand(Command="> load timestep=160")
+results3.SendCommand(Command="> load timestep=138")
+results3.SendCommand(Command="> load timestep=104")
+results3.SendCommand(Command="> load timestep=90")
+results3.Exit()
+geometry2 = system5.GetContainer(ComponentName="Geometry")
+geometry2.Edit()
+Save(Overwrite=True)
+geometry2.Exit()
+mesh2 = system5.GetContainer(ComponentName="Mesh")
+mesh2.Edit()
+meshComponent2 = system5.GetComponent(Name="Mesh")
+meshComponent2.Update(AllDependencies=True)
+mesh2.Exit()
+meshComponent2.Reset()
+meshComponent2.Refresh()
+mesh2.Edit()
+mesh2.Exit()
+meshComponent2.Reset()
+meshComponent2.Refresh()
+mesh2.Edit()
+Save(Overwrite=True)
+mesh2.Exit()
+meshComponent2.Update(AllDependencies=True)
+setup2.Edit()
+setup2.Exit()
+setupComponent1 = system5.GetComponent(Name="Setup")
+setupComponent1.Reset()
+setup2.Edit()
+setup2.Exit()
+system5.Delete()
+system6 = system3.Duplicate(
+    ComponentsToShare=[],
+    RelativeTo=system3)
+resultsComponent3 = system6.GetComponent(Name="Results")
+resultsComponent3.RemoveFromSystem(System=system6)
+system6.Delete()
+template1 = GetTemplate(TemplateName="Geometry")
+system7 = template1.CreateSystem(
+    Position="Right",
+    RelativeTo=system3)
+geometryComponent1 = system7.GetComponent(Name="Geometry")
+geometryComponent2 = system3.GetComponent(Name="Geometry")
+geometryComponent1.ReplaceWithShare(
+    TargetSystem=system7,
+    ComponentToShare=geometryComponent2,
+    SourceSystem=system3)
+system7.Delete()
+system3.Copy(KeepConnections=True)
+system8 = GetSystem(Name="CFX 4")
+solution3 = system8.GetContainer(ComponentName="Solution")
+solution3.SetExecutionControl(CCL=r"""&replace SIMULATION CONTROL:
+  EXECUTION CONTROL:
+    EXECUTABLE SELECTION:
+      Double Precision = Off
+      Large Problem = Off
+    END
+    INTERPOLATOR STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+    END
+    PARTITIONER STEP CONTROL:
+      Multidomain Option = Automatic
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARTITION SMOOTHING:
+        Maximum Partition Smoothing Sweeps = 100
+        Option = Smooth
+      END
+      PARTITIONING TYPE:
+        MeTiS Type = k-way
+        Option = MeTiS
+        Partition Size Rule = Automatic
+      END
+    END
+    RUN DEFINITION:
+      Run Mode = Full
+      Solver Input File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person.def
+    END
+    SOLVER STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARALLEL ENVIRONMENT:
+        Number of Processes = 6
+        Start Method = Intel MPI Local Parallel
+      END
+    END
+  END
+END
+""")
+solutionComponent3 = system8.GetComponent(Name="Solution")
+solutionComponent3.Update(Force=True)
+results4 = system8.GetContainer(ComponentName="Results")
+results4.Edit()
+results4.SendCommand(Command=r"""DATA READER:
+  Active Case Name = Case Copy of Smoke Moving Person
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person_001.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person_001.res
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END""")
+results4.SendCommand(Command="> load timestep=338")
+results4.Exit()
+system9 = template1.CreateSystem(
+    Position="Left",
+    RelativeTo=system8)
+system9.Delete()
+system10 = template1.CreateSystem(
+    Position="Right",
+    RelativeTo=system8)
+geometryComponent3 = system10.GetComponent(Name="Geometry")
+geometryComponent4 = system8.GetComponent(Name="Geometry")
+geometryComponent3.ReplaceWithShare(
+    TargetSystem=system10,
+    ComponentToShare=geometryComponent4,
+    SourceSystem=system8)
+solution3.Exit()
+system11 = system10.Duplicate(
+    ComponentsToShare=[],
+    RelativeTo=system10)
+system11.Delete()
+system10.Delete()
+system12 = template1.CreateSystem(
+    Position="Right",
+    RelativeTo=system8)
+componentTemplate1 = GetComponentTemplate(Name="GeometryCellTemplate")
+geometryComponent5 = system12.GetComponent(Name="Geometry")
+system13 = template1.CreateSystem(
+    DataTransferTo=[Set(FromComponentTemplate=componentTemplate1, TransferName=None, ToComponent=geometryComponent5)],
+    Position="Left",
+    RelativeTo=system12)
+system12.Delete()
+geometryComponent6 = system13.GetComponent(Name="Geometry")
+geometryComponent6.ReplaceWithShare(
+    TargetSystem=system13,
+    ComponentToShare=geometryComponent4,
+    SourceSystem=system8)
+geometryComponent6.DeleteShare(System=system13)
+geometry3 = system13.GetContainer(ComponentName="Geometry")
+geometry3.Edit()
+geometry3.Exit()
+system13.Delete()
+system14 = template1.CreateSystem(
+    Position="Right",
+    RelativeTo=system8)
+geometryComponent7 = system14.GetComponent(Name="Geometry")
+geometryComponent7.ReplaceWithShare(
+    TargetSystem=system14,
+    ComponentToShare=geometryComponent4,
+    SourceSystem=system8)
+geometryComponent7.DeleteShare(System=system14)
+geometry4 = system14.GetContainer(ComponentName="Geometry")
+geometry4.Edit()
+Save(Overwrite=True)
+geometry4.Exit()
+geometry4.Edit()
+geometry4.Exit()
+geometry4.Edit()
+geometry4.Exit()
+system8.Copy(KeepConnections=True)
+system15 = GetSystem(Name="CFX 5")
+system16 = template1.CreateSystem(
+    Position="Right",
+    RelativeTo=system15)
+geometryComponent8 = system16.GetComponent(Name="Geometry")
+geometryComponent9 = system15.GetComponent(Name="Geometry")
+geometryComponent8.ReplaceWithShare(
+    TargetSystem=system16,
+    ComponentToShare=geometryComponent9,
+    SourceSystem=system15)
+geometryComponent8.DeleteShare(System=system16)
+system16.Delete()
+geometryComponent9.Reset()
+system15.Delete()
+system17 = GetSystem(Name="CFX")
+system17.Delete()
+system18 = GetSystem(Name="CFX 2")
+system18.Delete()
+system19 = GetSystem(Name="CFX 1")
+system19.Delete()
+results4.Edit()
+results4.SendCommand(Command=r"""DATA READER:
+  Active Case Name = Case Copy of Smoke Moving Person
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person_001.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-4\CFX\Smoke Moving Person_001.res
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END""")
+results4.SendCommand(Command="> load timestep=319")
+results4.SendCommand(Command="> load timestep=278")
+results4.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.190206
+    Pan = 0, 0
+    Rotation Quaternion = -0.0837246, -0.915782, -0.289962, -0.265067
+    
+  END
+
+END
+
+> update
+> load timestep=243""")
+results4.SendCommand(Command="> load timestep=205")
+results4.Exit()
+template2 = GetTemplate(TemplateName="CFX")
+system20 = template2.CreateSystem(
+    Position="Below",
+    RelativeTo=system8)
+system20.Delete()
+template3 = GetTemplate(
+    TemplateName="Fluid Flow",
+    Solver="CFX")
+system21 = template3.CreateSystem(
+    Position="Below",
+    RelativeTo=system8)
+system21.DisplayText = "smoke_2"
+CopySystems(
+    Systems=[system14, system8],
+    KeepConnections=True)
+system22 = GetSystem(Name="CFX 1")
+system22.Delete()
+system21.Delete()
+system23 = GetSystem(Name="Geom 1")
+system23.Delete()
+system14.Delete()
+system24 = template1.CreateSystem(
+    Position="Left",
+    RelativeTo=system8)
+geometryComponent10 = system24.GetComponent(Name="Geometry")
+geometryComponent10.ReplaceWithShare(
+    TargetSystem=system24,
+    ComponentToShare=geometryComponent4,
+    SourceSystem=system8)
+system24.Delete()
+system25 = template1.CreateSystem(
+    Position="Left",
+    RelativeTo=system8)
+geometryComponent11 = system25.GetComponent(Name="Geometry")
+system26 = template1.CreateSystem(
+    DataTransferTo=[Set(FromComponentTemplate=componentTemplate1, TransferName=None, ToComponent=geometryComponent11)],
+    Position="Left",
+    RelativeTo=system25)
+system25.Delete()
+system26.Delete()
+system27 = template1.CreateSystem(
+    Position="Left",
+    RelativeTo=system8)
+geometryComponent4.Reset()
+system8.Delete()
+system27.Delete()
+system28 = template1.CreateSystem(
+    Position="Below",
+    RelativeTo=system3)
+system28.DisplayText = "room"
+system29 = template3.CreateSystem(
+    Position="Right",
+    RelativeTo=system28)
+geometryComponent12 = system29.GetComponent(Name="Geometry")
+geometryComponent13 = system28.GetComponent(Name="Geometry")
+geometryComponent12.ReplaceWithShare(
+    TargetSystem=system29,
+    ComponentToShare=geometryComponent13,
+    SourceSystem=system28)
+geometryComponent12.DeleteShare(System=system29)
+system29.Delete()
+system28.Delete()
+system30 = template3.CreateSystem(
+    Position="Below",
+    RelativeTo=system3)
+system30.DisplayText = "smoke_1"
+geometry5 = system30.GetContainer(ComponentName="Geometry")
+geometry5.Edit(IsSpaceClaimGeometry=True)
+geometry5.Exit()
+geometry5.Edit()
+geometry5.Exit()
+geometryComponent14 = system30.GetComponent(Name="Geometry")
+geometryComponent14.Reset()
+geometry5.Edit(IsSpaceClaimGeometry=True)
+geometry5.Exit()
+geometry5.Edit()
+Save(Overwrite=True)
+geometry5.Exit()
+geometryComponent14.Reset()
+geometry5.Edit(IsSpaceClaimGeometry=True)
+geometry5.Exit()
+geometry5.Edit()
+Save(Overwrite=True)
+Save(Overwrite=True)
+Save(Overwrite=True)
+geometry5.Exit()
+system31 = template1.CreateSystem(
+    Position="Left",
+    RelativeTo=system30)
+geometryComponent15 = system31.GetComponent(Name="Geometry")
+geometryComponent15.ReplaceWithShare(
+    TargetSystem=system31,
+    ComponentToShare=geometryComponent14,
+    SourceSystem=system30)
+geometryComponent15.DeleteShare(System=system31)
+system30.Copy(KeepConnections=True)
+system32 = GetSystem(Name="CFX 1")
+system32.Delete()
+system31.Delete()
+system33 = system30.Duplicate(
+    ComponentsToShare=[],
+    RelativeTo=system30)
+system34 = system33.Duplicate(
+    ComponentsToShare=[],
+    RelativeTo=system33)
+system33.DisplayText = "smoke_2"
+system34.DisplayText = "smoke_3"
+system35 = template1.CreateSystem(
+    Position="Below",
+    RelativeTo=system30)
+geometryComponent16 = system35.GetComponent(Name="Geometry")
+geometryComponent16.ReplaceWithShare(
+    TargetSystem=system35,
+    ComponentToShare=geometryComponent14,
+    SourceSystem=system30)
+geometryComponent16.DeleteShare(System=system35)
+geometry6 = system35.GetContainer(ComponentName="Geometry")
+geometry6.Edit()
+Save(Overwrite=True)
+Save(Overwrite=True)
+Save(Overwrite=True)
+geometry6.Exit()
+system33.Delete()
+system34.Delete()
+geometry5.Edit()
+Save(Overwrite=True)
+geometry5.Exit()
+geometryComponent14.ReplaceWithShare(
+    TargetSystem=system30,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+system30.Copy(KeepConnections=True)
+system36 = GetSystem(Name="CFX 1")
+system36.Copy(KeepConnections=True)
+system36.Delete()
+system37 = GetSystem(Name="CFX 2")
+system37.Delete()
+system30.Delete()
+system38 = template3.CreateSystem(
+    Position="Below",
+    RelativeTo=system35)
+geometryComponent17 = system38.GetComponent(Name="Geometry")
+geometryComponent17.ReplaceWithShare(
+    TargetSystem=system38,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+system38.Delete()
+system39 = template3.CreateSystem(
+    Position="Below",
+    RelativeTo=system35)
+system39.Copy(KeepConnections=True)
+system40 = GetSystem(Name="CFX 1")
+system40.Delete()
+system41 = template3.CreateSystem(
+    Position="Right",
+    RelativeTo=system39)
+system42 = template3.CreateSystem(
+    Position="Right",
+    RelativeTo=system41)
+system39.DisplayText = "smoke_1"
+system41.DisplayText = "smoke_2"
+system42.DisplayText = "smoke_3"
+geometryComponent18 = system39.GetComponent(Name="Geometry")
+geometryComponent18.ReplaceWithShare(
+    TargetSystem=system39,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent19 = system41.GetComponent(Name="Geometry")
+geometryComponent19.ReplaceWithShare(
+    TargetSystem=system41,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent20 = system42.GetComponent(Name="Geometry")
+geometryComponent20.ReplaceWithShare(
+    TargetSystem=system42,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent18.DeleteShare(System=system39)
+geometryComponent20.DeleteShare(System=system42)
+geometryComponent19.DeleteShare(System=system41)
+geometry7 = system39.GetContainer(ComponentName="Geometry")
+geometry7.Edit()
+geometry7.Exit()
+Save(Overwrite=True)
+geometry7.Edit()
+geometry7.Exit()
+geometry6.Edit()
+Save(Overwrite=True)
+geometry6.Exit()
+geometryComponent18.ReplaceWithShare(
+    TargetSystem=system39,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent19.ReplaceWithShare(
+    TargetSystem=system41,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent20.ReplaceWithShare(
+    TargetSystem=system42,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent18.DeleteShare(System=system39)
+geometryComponent19.DeleteShare(System=system41)
+geometryComponent20.DeleteShare(System=system42)
+geometry8 = system39.GetContainer(ComponentName="Geometry")
+geometry8.Edit()
+geometry8.Exit()
+geometry6.Edit()
+Save(Overwrite=True)
+Save(Overwrite=True)
+Save(Overwrite=True)
+geometry6.Exit()
+geometryComponent18.ReplaceWithShare(
+    TargetSystem=system39,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent19.ReplaceWithShare(
+    TargetSystem=system41,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent20.ReplaceWithShare(
+    TargetSystem=system42,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent18.DeleteShare(System=system39)
+geometryComponent19.DeleteShare(System=system41)
+geometryComponent20.DeleteShare(System=system42)
+geometry9 = system39.GetContainer(ComponentName="Geometry")
+geometry9.Edit()
+geometry9.Exit()
+geometry6.Edit()
+Save(Overwrite=True)
+geometry6.Exit()
+geometryComponent18.ReplaceWithShare(
+    TargetSystem=system39,
+    ComponentToShare=geometryComponent16,
+    SourceSystem=system35)
+geometryComponent19.ReplaceWithShare(
+    TargetSystem=system41,
+    ComponentToShare=geometryComponent18,
+    SourceSystem=system39)
+geometryComponent20.ReplaceWithShare(
+    TargetSystem=system42,
+    ComponentToShare=geometryComponent19,
+    SourceSystem=system41)
+geometryComponent18.DeleteShare(System=system39)
+geometryComponent19.DeleteShare(System=system41)
+geometryComponent20.DeleteShare(System=system42)
+geometry10 = system39.GetContainer(ComponentName="Geometry")
+geometry10.Edit()
+geometry10.Exit()
+Save(Overwrite=True)
+geometry10.Edit()
+Save(Overwrite=True)
+Save(Overwrite=True)
+Save(Overwrite=True)
+geometry10.Exit()
+geometry11 = system41.GetContainer(ComponentName="Geometry")
+geometry11.Edit()
+Save(Overwrite=True)
+geometry11.Exit()
+geometry10.Edit()
+Save(Overwrite=True)
+Save(Overwrite=True)
+geometry10.Exit()
+geometry11.Edit()
+geometry11.Exit()
+geometry10.Edit()
+Save(Overwrite=True)
+Save(Overwrite=True)
+geometry10.Exit()
+geometry11.Edit()
+geometry11.Exit()
+geometry12 = system42.GetContainer(ComponentName="Geometry")
+geometry12.Edit()
+Save(Overwrite=True)
+geometry12.Exit()
+meshComponent3 = system39.GetComponent(Name="Mesh")
+meshComponent3.Update(AllDependencies=True)
+mesh3 = system39.GetContainer(ComponentName="Mesh")
+mesh3.Edit()
+mesh3.Exit()
+setup3 = system39.GetContainer(ComponentName="Setup")
+setup3.Edit()
+setup3.Exit()
+system43 = system39.Duplicate(
+    ComponentsToShare=[geometryComponent18, meshComponent3],
+    RelativeTo=system39)
+system43.Delete()
+system44 = system39.Duplicate(
+    ComponentsToShare=[geometryComponent18, meshComponent3],
+    RelativeTo=system39)
+system44.Delete()
+setup3.Edit()
+setup3.Exit()
+setupComponent2 = system39.GetComponent(Name="Setup")
+setupComponent2.Reset()
+Save(Overwrite=True)
+setup3.Edit()
+setup3.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+VIEW:View 1
+  Light Angle = 50, 110
+END
+
+> update
+LIBRARY: 
+&replace   ADDITIONAL VARIABLE: odor
+    Option = Definition
+    Tensor Type = SCALAR
+    Units = [g m^-3]
+    Variable Type = Specific
+  END # ADDITIONAL VARIABLE:odor
+END # LIBRARY:
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""LIBRARY: 
+&replace   ADDITIONAL VARIABLE: odor
+    Option = Definition
+    Tensor Type = SCALAR
+    Units = [g m^-3]
+    Variable Type = Specific
+  END # ADDITIONAL VARIABLE:odor
+END # LIBRARY:
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""LIBRARY: 
+&replace   ADDITIONAL VARIABLE: odor
+    Option = Definition
+    Tensor Type = SCALAR
+    Units = [g m^-3]
+    Variable Type = Volumetric
+  END # ADDITIONAL VARIABLE:odor
+END # LIBRARY:
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""LIBRARY: 
+&replace   ADDITIONAL VARIABLE: odor
+    Option = Definition
+    Tensor Type = SCALAR
+    Units = [g m^-3]
+    Variable Type = Volumetric
+  END # ADDITIONAL VARIABLE:odor
+END # LIBRARY:
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.196072
+    Pan = 0, 0
+    Rotation Quaternion = 0.208156, -0.170582, 0.0262736, 0.962742
+    
+  END
+
+END
+
+> update
+FLOW: Flow Analysis 1
+&replace   DOMAIN: vent
+    Coord Frame = Coord 0
+    Domain Type = Fluid
+    Location = B20
+    DOMAIN MODELS: 
+      BUOYANCY MODEL: 
+        Option = Non Buoyant
+      END # BUOYANCY MODEL:
+      DOMAIN MOTION: 
+        Option = Stationary
+      END # DOMAIN MOTION:
+      MESH DEFORMATION: 
+        Option = None
+      END # MESH DEFORMATION:
+      REFERENCE PRESSURE: 
+        Reference Pressure = 0 [atm]
+      END # REFERENCE PRESSURE:
+    END # DOMAIN MODELS:
+    FLUID DEFINITION: Fluid 1
+      Material = Air at 25 C
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Fluid
+      END # MORPHOLOGY:
+    END # FLUID DEFINITION:Fluid 1
+    FLUID MODELS: 
+      COMBUSTION MODEL: 
+        Option = None
+      END # COMBUSTION MODEL:
+      HEAT TRANSFER MODEL: 
+        Fluid Temperature = 25 [C]
+        Option = Isothermal
+      END # HEAT TRANSFER MODEL:
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END # THERMAL RADIATION MODEL:
+      TURBULENCE MODEL: 
+        Option = k epsilon
+      END # TURBULENCE MODEL:
+      TURBULENT WALL FUNCTIONS: 
+        Option = Scalable
+      END # TURBULENT WALL FUNCTIONS:
+    END # FLUID MODELS:
+  END # DOMAIN:vent
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+FLOW: Flow Analysis 1
+&replace   DOMAIN: vent
+    Coord Frame = Coord 0
+    Domain Type = Fluid
+    Location = B20
+    DOMAIN MODELS: 
+      BUOYANCY MODEL: 
+        Option = Non Buoyant
+      END # BUOYANCY MODEL:
+      DOMAIN MOTION: 
+        Option = Stationary
+      END # DOMAIN MOTION:
+      MESH DEFORMATION: 
+        Option = None
+      END # MESH DEFORMATION:
+      REFERENCE PRESSURE: 
+        Reference Pressure = 0 [atm]
+      END # REFERENCE PRESSURE:
+    END # DOMAIN MODELS:
+    FLUID DEFINITION: Fluid 1
+      Material = Air at 25 C
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Fluid
+      END # MORPHOLOGY:
+    END # FLUID DEFINITION:Fluid 1
+    FLUID MODELS: 
+      ADDITIONAL VARIABLE: odor
+        Kinematic Diffusivity = 1e-4 [m^2 s^-1]
+        Option = Transport Equation
+      END # ADDITIONAL VARIABLE:odor
+      COMBUSTION MODEL: 
+        Option = None
+      END # COMBUSTION MODEL:
+      HEAT TRANSFER MODEL: 
+        Option = None
+      END # HEAT TRANSFER MODEL:
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END # THERMAL RADIATION MODEL:
+      TURBULENCE MODEL: 
+        Option = k epsilon
+      END # TURBULENCE MODEL:
+      TURBULENT WALL FUNCTIONS: 
+        Option = Scalable
+      END # TURBULENT WALL FUNCTIONS:
+    END # FLUID MODELS:
+  END # DOMAIN:vent
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: vent
+    Coord Frame = Coord 0
+    Domain Type = Fluid
+    Location = B20
+    DOMAIN MODELS: 
+      BUOYANCY MODEL: 
+        Option = Non Buoyant
+      END # BUOYANCY MODEL:
+      DOMAIN MOTION: 
+        Option = Stationary
+      END # DOMAIN MOTION:
+      MESH DEFORMATION: 
+        Option = None
+      END # MESH DEFORMATION:
+      REFERENCE PRESSURE: 
+        Reference Pressure = 0 [atm]
+      END # REFERENCE PRESSURE:
+    END # DOMAIN MODELS:
+    FLUID DEFINITION: Fluid 1
+      Material = Air at 25 C
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Fluid
+      END # MORPHOLOGY:
+    END # FLUID DEFINITION:Fluid 1
+    FLUID MODELS: 
+      ADDITIONAL VARIABLE: odor
+        Kinematic Diffusivity = 1e-4 [m^2 s^-1]
+        Option = Transport Equation
+      END # ADDITIONAL VARIABLE:odor
+      COMBUSTION MODEL: 
+        Option = None
+      END # COMBUSTION MODEL:
+      HEAT TRANSFER MODEL: 
+        Option = None
+      END # HEAT TRANSFER MODEL:
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END # THERMAL RADIATION MODEL:
+      TURBULENCE MODEL: 
+        Option = k epsilon
+      END # TURBULENCE MODEL:
+      TURBULENT WALL FUNCTIONS: 
+        Option = Scalable
+      END # TURBULENT WALL FUNCTIONS:
+    END # FLUID MODELS:
+  END # DOMAIN:vent
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.160447
+    Pan = 0.402887, -0.87791
+    Rotation Quaternion = 0.0639352, 0.340034, 0.119055, 0.930699
+    
+  END
+
+END
+
+> update
+FLOW: Flow Analysis 1
+  DOMAIN: vent
+&replace     BOUNDARY: room
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F21.20,F22.20,F23.20,F24.20,F25.20,F26.20,F27.20
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Option = Zero Flux
+        END # ADDITIONAL VARIABLE:odor
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:room
+  END # DOMAIN:vent
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+  DOMAIN: vent
+&replace     BOUNDARY: room
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F21.20,F22.20,F23.20,F24.20,F25.20,F26.20,F27.20
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Option = Zero Flux
+        END # ADDITIONAL VARIABLE:odor
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:room
+  END # DOMAIN:vent
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+  DOMAIN: vent
+&replace     BOUNDARY: room
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F21.20,F22.20,F23.20,F24.20,F25.20,F26.20,F27.20
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Option = Zero Flux
+        END # ADDITIONAL VARIABLE:odor
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:room
+  END # DOMAIN:vent
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.19129
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+PRIMITIVE2D:F41.40
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F42.40
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F43.40
+  Prim2d Visibility = True
+END""")
+setup3.SendCommand(Command="""PRIMITIVE2D:F41.40
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F42.40
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F43.40
+  Prim2d Visibility = True
+END""")
+setup3.SendCommand(Command=">rename from=/FLOW:Flow Analysis 1/DOMAIN:Default Domain,to=person")
+setup3.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.200854
+    Pan = 0, 0
+    Rotation Quaternion = 0.135938, -0.514457, 0.0669981, 0.844027
+    
+  END
+
+END
+
+> update
+FLOW: Flow Analysis 1
+  DOMAIN: vent
+&replace     BOUNDARY: vent Default
+      Boundary Type = INLET
+      Interface Boundary = Off
+      Location = F28.20
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Additional Variable Value = 0 [kg m^-3]
+          Option = Value
+        END # ADDITIONAL VARIABLE:odor
+        FLOW REGIME: 
+          Option = Subsonic
+        END # FLOW REGIME:
+        MASS AND MOMENTUM: 
+          Normal Speed = 1 [m s^-1]
+          Option = Normal Speed
+        END # MASS AND MOMENTUM:
+        TURBULENCE: 
+          Eddy Viscosity Ratio = 10.
+          Fractional Intensity = 0.05
+          Option = Intensity and Eddy Viscosity Ratio
+        END # TURBULENCE:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:vent Default
+  END # DOMAIN:vent
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+  DOMAIN: vent
+&replace     BOUNDARY: vent Default
+      Boundary Type = INLET
+      Interface Boundary = Off
+      Location = F28.20
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Additional Variable Value = 0 [kg m^-3]
+          Option = Value
+        END # ADDITIONAL VARIABLE:odor
+        FLOW REGIME: 
+          Option = Subsonic
+        END # FLOW REGIME:
+        MASS AND MOMENTUM: 
+          Normal Speed = 1 [m s^-1]
+          Option = Normal Speed
+        END # MASS AND MOMENTUM:
+        TURBULENCE: 
+          Eddy Viscosity Ratio = 10.
+          Fractional Intensity = 0.05
+          Option = Intensity and Eddy Viscosity Ratio
+        END # TURBULENCE:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:vent Default
+  END # DOMAIN:vent
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""PRIMITIVE2D:F28.20
+  Prim2d Visibility = True
+END""")
+setup3.SendCommand(Command="""PRIMITIVE2D:F28.20
+  Prim2d Visibility = True
+END""")
+setup3.SendCommand(Command="""PRIMITIVE2D:F21.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F22.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F23.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F24.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F25.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F26.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F27.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F28.20
+  Prim2d Visibility = True
+END""")
+setup3.SendCommand(Command="""PRIMITIVE2D:F21.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F22.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F23.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F24.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F25.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F26.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F27.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F28.20
+  Prim2d Visibility = True
+END""")
+setup3.SendCommand(Command=">rename from=/FLOW:Flow Analysis 1/DOMAIN:vent,to=environment")
+setup3.SendCommand(Command="""PRIMITIVE2D:F28.20
+  Prim2d Visibility = True
+END""")
+setup3.SendCommand(Command="""PRIMITIVE2D:F28.20
+  Prim2d Visibility = True
+END""")
+setup3.SendCommand(Command=">rename from=/FLOW:Flow Analysis 1/DOMAIN:environment/BOUNDARY:environment Default,to=vent")
+setup3.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.200854
+    Pan = 0, 0
+    Rotation Quaternion = 0.284732, -0.350044, -0.0473542, 0.891167
+    
+  END
+
+END
+
+> update
+FLOW: Flow Analysis 1
+  DOMAIN: person
+&replace     BOUNDARY: person Default
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F41.40,F42.40,F43.40
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Option = Zero Flux
+        END # ADDITIONAL VARIABLE:odor
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:person Default
+  END # DOMAIN:person
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+  DOMAIN: person
+&replace     BOUNDARY: person Default
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F41.40,F42.40,F43.40
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Option = Zero Flux
+        END # ADDITIONAL VARIABLE:odor
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:person Default
+  END # DOMAIN:person
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = 3 [min]
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = 3 [min]
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.Exit()
+setup4 = system3.GetContainer(ComponentName="Setup")
+setup4.Edit()
+setup4.Exit()
+setup3.Edit()
+setup3.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.4514, 0
+    Scale = 0.157961
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+VIEW:View 1
+  Light Angle = 50, 110
+END
+
+> update
+FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = 3 [min]
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = 3 [min]
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup3.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = 3 [min]
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+Save(Overwrite=True)

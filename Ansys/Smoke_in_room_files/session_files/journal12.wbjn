@@ -1,0 +1,11 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+system1 = GetSystem(Name="CFX 3")
+geometry1 = system1.GetContainer(ComponentName="Geometry")
+geometry1.Edit()
+geometry1.Exit()
+system1.Delete()
+system2 = GetSystem(Name="CFX 4")
+system2.DisplayText = "Backup of smoke_3"
+Save(Overwrite=True)

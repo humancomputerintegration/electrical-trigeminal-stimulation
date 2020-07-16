@@ -1,0 +1,1848 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+system1 = GetSystem(Name="CFX 2")
+setupComponent1 = system1.GetComponent(Name="Setup")
+setupComponent1.Reset()
+geometry1 = system1.GetContainer(ComponentName="Geometry")
+geometry1.Edit()
+geometry1.Exit()
+geometry1.Edit()
+geometry1.Exit()
+mesh1 = system1.GetContainer(ComponentName="Mesh")
+mesh1.Edit()
+mesh1.Exit()
+setup1 = system1.GetContainer(ComponentName="Setup")
+setup1.Edit()
+setup1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+VIEW:View 1
+  Light Angle = 50, 110
+END
+
+> update
+LIBRARY: 
+&replace   ADDITIONAL VARIABLE: odor
+    Option = Definition
+    Tensor Type = SCALAR
+    Units = [kg m^-3 ]
+    Variable Type = Volumetric
+  END # ADDITIONAL VARIABLE:odor
+END # LIBRARY:
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""LIBRARY: 
+&replace   ADDITIONAL VARIABLE: odor
+    Option = Definition
+    Tensor Type = SCALAR
+    Units = [kg m^-3 ]
+    Variable Type = Volumetric
+  END # ADDITIONAL VARIABLE:odor
+END # LIBRARY:
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+totalTime=300[s]
+END
+END
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+Concentration=1[kg m^-3]
+END
+END
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+odorControl=t/totalTime*Concentration
+END
+END
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+personX=cos(t/60[s]*pi*2)*3
+END
+END
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+personZ=sin(t/60[s]*pi*2)
+END
+END
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = totalTime
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = totalTime
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: person
+    Coord Frame = Coord 0
+    Domain Type = Immersed Solid
+    Location = B40
+    DOMAIN MODELS: 
+      DOMAIN MOTION: 
+        Linear Velocity = 0.2 [m s^-1]
+        Option = Speed and Direction
+        TRANSLATION DIRECTION: 
+          Option = Cartesian Components
+          Unit Vector X Component = personX
+          Unit Vector Y Component = 0
+          Unit Vector Z Component = personZ
+        END # TRANSLATION DIRECTION:
+      END # DOMAIN MOTION:
+    END # DOMAIN MODELS:
+  END # DOMAIN:person
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: person
+    Coord Frame = Coord 0
+    Domain Type = Immersed Solid
+    Location = B40
+    DOMAIN MODELS: 
+      DOMAIN MOTION: 
+        Linear Velocity = 0.2 [m s^-1]
+        Option = Speed and Direction
+        TRANSLATION DIRECTION: 
+          Option = Cartesian Components
+          Unit Vector X Component = personX
+          Unit Vector Y Component = 0
+          Unit Vector Z Component = personZ
+        END # TRANSLATION DIRECTION:
+      END # DOMAIN MOTION:
+    END # DOMAIN MODELS:
+  END # DOMAIN:person
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: Default Domain
+    Coord Frame = Coord 0
+    Domain Type = Fluid
+    Location = B20
+    BOUNDARY: Default Domain Default
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F21.20,F22.20,F23.20,F24.20,F25.20,F26.20,F27.20,F28.20
+      BOUNDARY CONDITIONS: 
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:Default Domain Default
+    DOMAIN MODELS: 
+      BUOYANCY MODEL: 
+        Option = Non Buoyant
+      END # BUOYANCY MODEL:
+      DOMAIN MOTION: 
+        Option = Stationary
+      END # DOMAIN MOTION:
+      MESH DEFORMATION: 
+        Option = None
+      END # MESH DEFORMATION:
+      REFERENCE PRESSURE: 
+        Reference Pressure = 0 [atm]
+      END # REFERENCE PRESSURE:
+    END # DOMAIN MODELS:
+    FLUID DEFINITION: Fluid 1
+      Material = Air at 25 C
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Fluid
+      END # MORPHOLOGY:
+    END # FLUID DEFINITION:Fluid 1
+    FLUID MODELS: 
+      ADDITIONAL VARIABLE: odor
+        Kinematic Diffusivity = 1e-4 [m^2 s^-1]
+        Option = Transport Equation
+      END # ADDITIONAL VARIABLE:odor
+      COMBUSTION MODEL: 
+        Option = None
+      END # COMBUSTION MODEL:
+      HEAT TRANSFER MODEL: 
+        Option = None
+      END # HEAT TRANSFER MODEL:
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END # THERMAL RADIATION MODEL:
+      TURBULENCE MODEL: 
+        Option = k epsilon
+      END # TURBULENCE MODEL:
+      TURBULENT WALL FUNCTIONS: 
+        Option = Scalable
+      END # TURBULENT WALL FUNCTIONS:
+    END # FLUID MODELS:
+  END # DOMAIN:Default Domain
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: Default Domain
+    Coord Frame = Coord 0
+    Domain Type = Fluid
+    Location = B20
+    BOUNDARY: Default Domain Default
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F21.20,F22.20,F23.20,F24.20,F25.20,F26.20,F27.20,F28.20
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Option = Zero Flux
+        END # ADDITIONAL VARIABLE:odor
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:Default Domain Default
+    DOMAIN MODELS: 
+      BUOYANCY MODEL: 
+        Option = Non Buoyant
+      END # BUOYANCY MODEL:
+      DOMAIN MOTION: 
+        Option = Stationary
+      END # DOMAIN MOTION:
+      MESH DEFORMATION: 
+        Option = None
+      END # MESH DEFORMATION:
+      REFERENCE PRESSURE: 
+        Reference Pressure = 0 [atm]
+      END # REFERENCE PRESSURE:
+    END # DOMAIN MODELS:
+    FLUID DEFINITION: Fluid 1
+      Material = Air at 25 C
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Fluid
+      END # MORPHOLOGY:
+    END # FLUID DEFINITION:Fluid 1
+    FLUID MODELS: 
+      ADDITIONAL VARIABLE: odor
+        Kinematic Diffusivity = 1e-4 [m^2 s^-1]
+        Option = Transport Equation
+      END # ADDITIONAL VARIABLE:odor
+      COMBUSTION MODEL: 
+        Option = None
+      END # COMBUSTION MODEL:
+      HEAT TRANSFER MODEL: 
+        Option = None
+      END # HEAT TRANSFER MODEL:
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END # THERMAL RADIATION MODEL:
+      TURBULENCE MODEL: 
+        Option = k epsilon
+      END # TURBULENCE MODEL:
+      TURBULENT WALL FUNCTIONS: 
+        Option = Scalable
+      END # TURBULENT WALL FUNCTIONS:
+    END # FLUID MODELS:
+  END # DOMAIN:Default Domain
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+  DOMAIN: Default Domain
+&replace     BOUNDARY: vent
+      Boundary Type = INLET
+      Interface Boundary = Off
+      Location = vent
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Additional Variable Value = odorControl
+          Option = Value
+        END # ADDITIONAL VARIABLE:odor
+        FLOW REGIME: 
+          Option = Subsonic
+        END # FLOW REGIME:
+        MASS AND MOMENTUM: 
+          Normal Speed = 1 [m s^-1]
+          Option = Normal Speed
+        END # MASS AND MOMENTUM:
+        TURBULENCE: 
+          Eddy Viscosity Ratio = 10.
+          Fractional Intensity = 0.05
+          Option = Intensity and Eddy Viscosity Ratio
+        END # TURBULENCE:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:vent
+  END # DOMAIN:Default Domain
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+  DOMAIN: Default Domain
+&replace     BOUNDARY: vent
+      Boundary Type = INLET
+      Interface Boundary = Off
+      Location = vent
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Additional Variable Value = odorControl
+          Option = Value
+        END # ADDITIONAL VARIABLE:odor
+        FLOW REGIME: 
+          Option = Subsonic
+        END # FLOW REGIME:
+        MASS AND MOMENTUM: 
+          Normal Speed = 1 [m s^-1]
+          Option = Normal Speed
+        END # MASS AND MOMENTUM:
+        TURBULENCE: 
+          Eddy Viscosity Ratio = 10.
+          Fractional Intensity = 0.05
+          Option = Intensity and Eddy Viscosity Ratio
+        END # TURBULENCE:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:vent
+  END # DOMAIN:Default Domain
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   INITIALISATION: 
+    Option = Automatic
+    INITIAL CONDITIONS: 
+      Velocity Type = Cartesian
+      ADDITIONAL VARIABLE: odor
+        Additional Variable Value = 0 [kg m^-3]
+        Option = Automatic with Value
+      END # ADDITIONAL VARIABLE:odor
+      CARTESIAN VELOCITY COMPONENTS: 
+        Option = Automatic with Value
+        U = 0 [m s^-1]
+        V = 0 [m s^-1]
+        W = 0 [m s^-1]
+      END # CARTESIAN VELOCITY COMPONENTS:
+      STATIC PRESSURE: 
+        Option = Automatic with Value
+        Relative Pressure = 0 [Pa]
+      END # STATIC PRESSURE:
+      TURBULENCE INITIAL CONDITIONS: 
+        Option = Medium Intensity and Eddy Viscosity Ratio
+      END # TURBULENCE INITIAL CONDITIONS:
+    END # INITIAL CONDITIONS:
+  END # INITIALISATION:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   INITIALISATION: 
+    Option = Automatic
+    INITIAL CONDITIONS: 
+      Velocity Type = Cartesian
+      ADDITIONAL VARIABLE: odor
+        Additional Variable Value = 0 [kg m^-3]
+        Option = Automatic with Value
+      END # ADDITIONAL VARIABLE:odor
+      CARTESIAN VELOCITY COMPONENTS: 
+        Option = Automatic with Value
+        U = 0 [m s^-1]
+        V = 0 [m s^-1]
+        W = 0 [m s^-1]
+      END # CARTESIAN VELOCITY COMPONENTS:
+      STATIC PRESSURE: 
+        Option = Automatic with Value
+        Relative Pressure = 0 [Pa]
+      END # STATIC PRESSURE:
+      TURBULENCE INITIAL CONDITIONS: 
+        Option = Medium Intensity and Eddy Viscosity Ratio
+      END # TURBULENCE INITIAL CONDITIONS:
+    END # INITIAL CONDITIONS:
+  END # INITIALISATION:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   OUTPUT CONTROL: 
+    RESULTS: 
+      File Compression Level = Default
+      Option = Standard
+    END # RESULTS:
+    TRANSIENT RESULTS: Transient Results 1
+      File Compression Level = Default
+      Include Mesh = No
+      Option = Selected Variables
+      Output Variables List = Pressure,Velocity,odor
+      OUTPUT FREQUENCY: 
+        Option = Every Timestep
+      END # OUTPUT FREQUENCY:
+    END # TRANSIENT RESULTS:Transient Results 1
+  END # OUTPUT CONTROL:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   OUTPUT CONTROL: 
+    RESULTS: 
+      File Compression Level = Default
+      Option = Standard
+    END # RESULTS:
+    TRANSIENT RESULTS: Transient Results 1
+      File Compression Level = Default
+      Include Mesh = No
+      Option = Selected Variables
+      Output Variables List = Pressure,Velocity,odor
+      OUTPUT FREQUENCY: 
+        Option = Every Timestep
+      END # OUTPUT FREQUENCY:
+    END # TRANSIENT RESULTS:Transient Results 1
+  END # OUTPUT CONTROL:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+Save(Overwrite=True)
+setup1.Exit()
+solution1 = system1.GetContainer(ComponentName="Solution")
+solution1.SetExecutionControl(CCL=r"""&replace SIMULATION CONTROL:
+  EXECUTION CONTROL:
+    EXECUTABLE SELECTION:
+      Double Precision = Off
+      Large Problem = Off
+    END
+    INTERPOLATOR STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+    END
+    PARTITIONER STEP CONTROL:
+      Multidomain Option = Automatic
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARTITION SMOOTHING:
+        Maximum Partition Smoothing Sweeps = 100
+        Option = Smooth
+      END
+      PARTITIONING TYPE:
+        MeTiS Type = k-way
+        Option = MeTiS
+        Partition Size Rule = Automatic
+      END
+    END
+    RUN DEFINITION:
+      Run Mode = Full
+      Solver Input File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3.def
+    END
+    SOLVER STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARALLEL ENVIRONMENT:
+        Number of Processes = 6
+        Start Method = Intel MPI Local Parallel
+      END
+    END
+  END
+END
+""")
+solutionComponent1 = system1.GetComponent(Name="Solution")
+solutionComponent1.Update(Force=True)
+solution1.Exit()
+resultsComponent1 = system1.GetComponent(Name="Results")
+resultsComponent1.Update(AllDependencies=True)
+results1 = system1.GetContainer(ComponentName="Results")
+results1.Edit()
+results1.SendCommand(Command="> autolegend plot=/VOLUME RENDERING:Volume Rendering 1, view=VIEW:View 1")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = odor
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Global
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = odor
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Global
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command=r"""DATA READER:
+  Active Case Name = Case smoke_3
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3_002.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3_002.res
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END""")
+results1.SendCommand(Command="> load timestep=257")
+results1.SendCommand(Command="> load timestep=236")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:Default Domain Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case smoke_3/BOUNDARY:Default Domain Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.227273
+    Pan = 0, 0
+    Rotation Quaternion = -4.32978e-17, 0.707107, 0.707107, 4.32978e-17
+    
+  END
+
+END
+
+> update
+> load timestep=237""")
+results1.SendCommand(Command="> load timestep=239")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_3
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export_.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = Default Domain Default
+Location List = Default Domain Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command=r"""!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<=$finish; $i++) {
+> load timestep=$i
+EXPORT:
+Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\user_files\smoke_3\export_$i.csv
+END
+>export
+!}""")
+results1.Exit()
+setup1.Edit()
+setup1.Exit()
+setupComponent1.Reset()
+setupComponent1.Reset()
+resultsComponent1.Reset()
+setupComponent1.Reset()
+solutionComponent1.Reset()
+geometry1.Edit()
+geometry1.Exit()
+mesh1.Edit()
+mesh1.Exit()
+meshComponent1 = system1.GetComponent(Name="Mesh")
+meshComponent1.Reset()
+geometry1.Edit()
+geometry1.Exit()
+geometry1.Edit()
+geometry1.Exit()
+geometry1.Edit()
+geometry1.Exit()
+geometry1.Edit()
+geometry1.Exit()
+geometry1.Edit()
+geometry1.Exit()
+meshComponent1.Refresh()
+mesh1.Edit()
+Save(Overwrite=True)
+mesh1.Exit()
+meshComponent1.Update(AllDependencies=True)
+setup1.Edit()
+setup1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+VIEW:View 1
+  Light Angle = 50, 110
+END
+
+> update
+LIBRARY: 
+&replace   ADDITIONAL VARIABLE: odor
+    Option = Definition
+    Tensor Type = SCALAR
+    Units = [kg m^-3 ]
+    Variable Type = Volumetric
+  END # ADDITIONAL VARIABLE:odor
+END # LIBRARY:
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""LIBRARY: 
+&replace   ADDITIONAL VARIABLE: odor
+    Option = Definition
+    Tensor Type = SCALAR
+    Units = [kg m^-3 ]
+    Variable Type = Volumetric
+  END # ADDITIONAL VARIABLE:odor
+END # LIBRARY:
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+totalTime=300[s]
+END
+END
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+Concentration=1[kg m^-3]
+END
+END
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+odorControl=t/totalTime*Concentration
+END
+END
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+personX=cos(t/60[s]*pi*2)*3
+END
+END
+END""")
+setup1.SendCommand(Command="""LIBRARY:
+CEL:
+EXPRESSIONS:
+personZ=sin(t/60[s]*pi*2)
+END
+END
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = totalTime
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   ANALYSIS TYPE: 
+    Option = Transient
+    EXTERNAL SOLVER COUPLING: 
+      Option = None
+    END # EXTERNAL SOLVER COUPLING:
+    INITIAL TIME: 
+      Option = Automatic with Value
+      Time = 0 [s]
+    END # INITIAL TIME:
+    TIME DURATION: 
+      Option = Total Time
+      Total Time = totalTime
+    END # TIME DURATION:
+    TIME STEPS: 
+      Option = Timesteps
+      Timesteps = 1 [s]
+    END # TIME STEPS:
+  END # ANALYSIS TYPE:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: person
+    Coord Frame = Coord 0
+    Domain Type = Immersed Solid
+    Location = B40
+    DOMAIN MODELS: 
+      DOMAIN MOTION: 
+        Linear Velocity = 0.2 [m s^-1]
+        Option = Speed and Direction
+        TRANSLATION DIRECTION: 
+          Option = Cartesian Components
+          Unit Vector X Component = personX
+          Unit Vector Y Component = 0
+          Unit Vector Z Component = personZ
+        END # TRANSLATION DIRECTION:
+      END # DOMAIN MOTION:
+    END # DOMAIN MODELS:
+  END # DOMAIN:person
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: person
+    Coord Frame = Coord 0
+    Domain Type = Immersed Solid
+    Location = B40
+    DOMAIN MODELS: 
+      DOMAIN MOTION: 
+        Linear Velocity = 0.2 [m s^-1]
+        Option = Speed and Direction
+        TRANSLATION DIRECTION: 
+          Option = Cartesian Components
+          Unit Vector X Component = personX
+          Unit Vector Y Component = 0
+          Unit Vector Z Component = personZ
+        END # TRANSLATION DIRECTION:
+      END # DOMAIN MOTION:
+    END # DOMAIN MODELS:
+  END # DOMAIN:person
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""PRIMITIVE2D:F21.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F22.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F23.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F24.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F25.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F26.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F27.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F28.20
+  Prim2d Visibility = True
+END""")
+setup1.SendCommand(Command="""PRIMITIVE2D:F21.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F22.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F23.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F24.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F25.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F26.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F27.20
+  Prim2d Visibility = True
+END
+PRIMITIVE2D:F28.20
+  Prim2d Visibility = True
+END""")
+setup1.SendCommand(Command=">rename from=/FLOW:Flow Analysis 1/DOMAIN:Default Domain,to=environment")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: environment
+    Coord Frame = Coord 0
+    Domain Type = Fluid
+    Location = B20
+    BOUNDARY: environment Default
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F21.20,F22.20,F23.20,F24.20,F25.20,F26.20,F27.20,F28.20
+      BOUNDARY CONDITIONS: 
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:environment Default
+    DOMAIN MODELS: 
+      BUOYANCY MODEL: 
+        Option = Non Buoyant
+      END # BUOYANCY MODEL:
+      DOMAIN MOTION: 
+        Option = Stationary
+      END # DOMAIN MOTION:
+      MESH DEFORMATION: 
+        Option = None
+      END # MESH DEFORMATION:
+      REFERENCE PRESSURE: 
+        Reference Pressure = 0 [atm]
+      END # REFERENCE PRESSURE:
+    END # DOMAIN MODELS:
+    FLUID DEFINITION: Fluid 1
+      Material = Air at 25 C
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Fluid
+      END # MORPHOLOGY:
+    END # FLUID DEFINITION:Fluid 1
+    FLUID MODELS: 
+      ADDITIONAL VARIABLE: odor
+        Kinematic Diffusivity = 1e-4 [m^2 s^-1]
+        Option = Transport Equation
+      END # ADDITIONAL VARIABLE:odor
+      COMBUSTION MODEL: 
+        Option = None
+      END # COMBUSTION MODEL:
+      HEAT TRANSFER MODEL: 
+        Option = None
+      END # HEAT TRANSFER MODEL:
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END # THERMAL RADIATION MODEL:
+      TURBULENCE MODEL: 
+        Option = k epsilon
+      END # TURBULENCE MODEL:
+      TURBULENT WALL FUNCTIONS: 
+        Option = Scalable
+      END # TURBULENT WALL FUNCTIONS:
+    END # FLUID MODELS:
+  END # DOMAIN:environment
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   DOMAIN: environment
+    Coord Frame = Coord 0
+    Domain Type = Fluid
+    Location = B20
+    BOUNDARY: environment Default
+      Boundary Type = WALL
+      Create Other Side = Off
+      Interface Boundary = Off
+      Location = F21.20,F22.20,F23.20,F24.20,F25.20,F26.20,F27.20,F28.20
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Option = Zero Flux
+        END # ADDITIONAL VARIABLE:odor
+        MASS AND MOMENTUM: 
+          Option = No Slip Wall
+        END # MASS AND MOMENTUM:
+        WALL ROUGHNESS: 
+          Option = Smooth Wall
+        END # WALL ROUGHNESS:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:environment Default
+    DOMAIN MODELS: 
+      BUOYANCY MODEL: 
+        Option = Non Buoyant
+      END # BUOYANCY MODEL:
+      DOMAIN MOTION: 
+        Option = Stationary
+      END # DOMAIN MOTION:
+      MESH DEFORMATION: 
+        Option = None
+      END # MESH DEFORMATION:
+      REFERENCE PRESSURE: 
+        Reference Pressure = 0 [atm]
+      END # REFERENCE PRESSURE:
+    END # DOMAIN MODELS:
+    FLUID DEFINITION: Fluid 1
+      Material = Air at 25 C
+      Option = Material Library
+      MORPHOLOGY: 
+        Option = Continuous Fluid
+      END # MORPHOLOGY:
+    END # FLUID DEFINITION:Fluid 1
+    FLUID MODELS: 
+      ADDITIONAL VARIABLE: odor
+        Kinematic Diffusivity = 1e-4 [m^2 s^-1]
+        Option = Transport Equation
+      END # ADDITIONAL VARIABLE:odor
+      COMBUSTION MODEL: 
+        Option = None
+      END # COMBUSTION MODEL:
+      HEAT TRANSFER MODEL: 
+        Option = None
+      END # HEAT TRANSFER MODEL:
+      THERMAL RADIATION MODEL: 
+        Option = None
+      END # THERMAL RADIATION MODEL:
+      TURBULENCE MODEL: 
+        Option = k epsilon
+      END # TURBULENCE MODEL:
+      TURBULENT WALL FUNCTIONS: 
+        Option = Scalable
+      END # TURBULENT WALL FUNCTIONS:
+    END # FLUID MODELS:
+  END # DOMAIN:environment
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+FLOW: Flow Analysis 1
+  DOMAIN: environment
+&replace     BOUNDARY: vent
+      Boundary Type = INLET
+      Interface Boundary = Off
+      Location = vent
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Additional Variable Value = odorControl
+          Option = Value
+        END # ADDITIONAL VARIABLE:odor
+        FLOW REGIME: 
+          Option = Subsonic
+        END # FLOW REGIME:
+        MASS AND MOMENTUM: 
+          Normal Speed = 1 [m s^-1]
+          Option = Normal Speed
+        END # MASS AND MOMENTUM:
+        TURBULENCE: 
+          Eddy Viscosity Ratio = 10.
+          Fractional Intensity = 0.05
+          Option = Intensity and Eddy Viscosity Ratio
+        END # TURBULENCE:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:vent
+  END # DOMAIN:environment
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+  DOMAIN: environment
+&replace     BOUNDARY: vent
+      Boundary Type = INLET
+      Interface Boundary = Off
+      Location = vent
+      BOUNDARY CONDITIONS: 
+        ADDITIONAL VARIABLE: odor
+          Additional Variable Value = odorControl
+          Option = Value
+        END # ADDITIONAL VARIABLE:odor
+        FLOW REGIME: 
+          Option = Subsonic
+        END # FLOW REGIME:
+        MASS AND MOMENTUM: 
+          Normal Speed = 1 [m s^-1]
+          Option = Normal Speed
+        END # MASS AND MOMENTUM:
+        TURBULENCE: 
+          Eddy Viscosity Ratio = 10.
+          Fractional Intensity = 0.05
+          Option = Intensity and Eddy Viscosity Ratio
+        END # TURBULENCE:
+      END # BOUNDARY CONDITIONS:
+    END # BOUNDARY:vent
+  END # DOMAIN:environment
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   INITIALISATION: 
+    Option = Automatic
+    INITIAL CONDITIONS: 
+      Velocity Type = Cartesian
+      ADDITIONAL VARIABLE: odor
+        Additional Variable Value = 0 [kg m^-3]
+        Option = Automatic with Value
+      END # ADDITIONAL VARIABLE:odor
+      CARTESIAN VELOCITY COMPONENTS: 
+        Option = Automatic with Value
+        U = 0 [m s^-1]
+        V = 0 [m s^-1]
+        W = 0 [m s^-1]
+      END # CARTESIAN VELOCITY COMPONENTS:
+      STATIC PRESSURE: 
+        Option = Automatic with Value
+        Relative Pressure = 0 [Pa]
+      END # STATIC PRESSURE:
+      TURBULENCE INITIAL CONDITIONS: 
+        Option = Medium Intensity and Eddy Viscosity Ratio
+      END # TURBULENCE INITIAL CONDITIONS:
+    END # INITIAL CONDITIONS:
+  END # INITIALISATION:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   INITIALISATION: 
+    Option = Automatic
+    INITIAL CONDITIONS: 
+      Velocity Type = Cartesian
+      ADDITIONAL VARIABLE: odor
+        Additional Variable Value = 0 [kg m^-3]
+        Option = Automatic with Value
+      END # ADDITIONAL VARIABLE:odor
+      CARTESIAN VELOCITY COMPONENTS: 
+        Option = Automatic with Value
+        U = 0 [m s^-1]
+        V = 0 [m s^-1]
+        W = 0 [m s^-1]
+      END # CARTESIAN VELOCITY COMPONENTS:
+      STATIC PRESSURE: 
+        Option = Automatic with Value
+        Relative Pressure = 0 [Pa]
+      END # STATIC PRESSURE:
+      TURBULENCE INITIAL CONDITIONS: 
+        Option = Medium Intensity and Eddy Viscosity Ratio
+      END # TURBULENCE INITIAL CONDITIONS:
+    END # INITIAL CONDITIONS:
+  END # INITIALISATION:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   OUTPUT CONTROL: 
+    RESULTS: 
+      File Compression Level = Default
+      Option = Standard
+    END # RESULTS:
+    TRANSIENT RESULTS: Transient Results 1
+      File Compression Level = Default
+      Include Mesh = No
+      Option = Selected Variables
+      Output Variables List = Pressure,Velocity,odor
+      OUTPUT FREQUENCY: 
+        Option = Every Timestep
+      END # OUTPUT FREQUENCY:
+    END # TRANSIENT RESULTS:Transient Results 1
+  END # OUTPUT CONTROL:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+setup1.SendCommand(Command="""FLOW: Flow Analysis 1
+&replace   OUTPUT CONTROL: 
+    RESULTS: 
+      File Compression Level = Default
+      Option = Standard
+    END # RESULTS:
+    TRANSIENT RESULTS: Transient Results 1
+      File Compression Level = Default
+      Include Mesh = No
+      Option = Selected Variables
+      Output Variables List = Pressure,Velocity,odor
+      OUTPUT FREQUENCY: 
+        Option = Every Timestep
+      END # OUTPUT FREQUENCY:
+    END # TRANSIENT RESULTS:Transient Results 1
+  END # OUTPUT CONTROL:
+END # FLOW:Flow Analysis 1
+
+
+PARAMETERIZATION:
+END""")
+Save(Overwrite=True)
+setup1.Exit()
+solution1.SetExecutionControl(CCL=r"""&replace SIMULATION CONTROL:
+  EXECUTION CONTROL:
+    EXECUTABLE SELECTION:
+      Double Precision = Off
+      Large Problem = Off
+    END
+    INTERPOLATOR STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+    END
+    PARTITIONER STEP CONTROL:
+      Multidomain Option = Automatic
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARTITION SMOOTHING:
+        Maximum Partition Smoothing Sweeps = 100
+        Option = Smooth
+      END
+      PARTITIONING TYPE:
+        MeTiS Type = k-way
+        Option = MeTiS
+        Partition Size Rule = Automatic
+      END
+    END
+    RUN DEFINITION:
+      Run Mode = Full
+      Solver Input File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3.def
+    END
+    SOLVER STEP CONTROL:
+      Runtime Priority = Standard
+      MEMORY CONTROL:
+        Memory Allocation Factor = 1.0
+      END
+      PARALLEL ENVIRONMENT:
+        Number of Processes = 6
+        Start Method = Intel MPI Local Parallel
+      END
+    END
+  END
+END
+""")
+solutionComponent1.Update(Force=True)
+solution1.Exit()
+resultsComponent1.Update(AllDependencies=True)
+results1.Edit()
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="> autolegend plot=/VOLUME RENDERING:Volume Rendering 1, view=VIEW:View 1")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = odor
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Global
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = odor
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Global
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command=r"""DATA READER:
+  Active Case Name = Case smoke_3
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3_001.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3_001.res
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END""")
+results1.SendCommand(Command="> load timestep=275")
+results1.SendCommand(Command="> load timestep=241")
+results1.SendCommand(Command="> load timestep=200")
+results1.SendCommand(Command="""ANIMATION:ANIMATION
+QAnim MPEG Filename = C:/Users/Muphy/Documents/smoke_3.wmv
+QAnim Save MPEG = Off
+QAnim Looping = Bounce
+QAnim Looping Cycles = 1
+Video Format = wmv
+
+END""")
+results1.SendCommand(Command="""DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case smoke_3
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = C:/Users/Muphy/Documents/smoke_3.wmv
+TimeAnim Save MPEG = Off
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END
+>animate timestepAnimate""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="> autolegend plot=/STREAMLINE:Streamline 1, view=VIEW:View 1")
+results1.SendCommand(Command="""STREAMLINE:Streamline 1
+Absolute Tolerance = 0.0 [m]
+Apply Instancing Transform = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Use Plot Variable
+Colour Scale = Linear
+Colour Variable = Velocity
+Colour Variable Boundary Values = Conservative
+Cross Periodics = On
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Draw Streams = On
+Draw Symbols = Off
+Grid Tolerance = 0.01
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = On
+Line Width = 1
+Location List = vent
+Locator Sampling Method = Equally Spaced
+Max = 0.0 [m s^-1]
+Maximum Number of Items = 25
+Min = 0.0 [m s^-1]
+Number of Samples = 25
+Number of Sides = 8
+Range = Global
+Reduction Factor = 1.0
+Reduction or Max Number = Max Number
+Sample Spacing = 0.1
+Sampling Aspect Ratio = 1
+Sampling Grid Angle = 0 [degree]
+Seed Point Type = Equally Spaced Samples
+Simplify Geometry = Off
+Specular Lighting = On
+Stream Drawing Mode = Line
+Stream Initial Direction = 0 , 0 , 0 
+Stream Size = 1.0
+Stream Symbol = Ball
+Streamline Direction = Forward
+Streamline Maximum Periods = 20
+Streamline Maximum Segments = 10000
+Streamline Maximum Time = 0.0 [s]
+Streamline Type = 3D Streamline
+Streamline Width = 2
+Surface Drawing = Smooth Shading
+Surface Streamline Direction = Forward and Backward
+Symbol Size = 1.0
+Symbol Start Time = 10.0 [s]
+Symbol Stop Time = -10.0 [s]
+Symbol Time Interval = 1.0 [s]
+Tolerance Mode = Grid Relative
+Transparency = 0.0
+Variable = Velocity
+Variable Boundary Values = Conservative
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /STREAMLINE:Streamline 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="> load timestep=208")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /STREAMLINE:Streamline 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_3
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = environment Default
+Location List = environment Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.Edit()
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /WIREFRAME:Wireframe, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DEFAULT LEGEND:Default Legend View 1, view=/VIEW:View 1""")
+results1.SendCommand(Command="> report hideItem=/TITLE PAGE")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case smoke_3/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_3
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = environment Default
+Location List = environment Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command=r"""!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<=$finish; $i++) {
+> load timestep=$i
+EXPORT:
+Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\user_files\smoke_sample\export_$i.csv
+END
+>export
+!}""")
+results1.Exit()
+results1.Edit()
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case smoke_3/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:environment Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case smoke_3/BOUNDARY:environment Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>hide /DATA READER/CASE:Case smoke_3/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:person Default, view=/VIEW:View 1""")
+results1.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_3
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export_300.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = environment Default
+Location List = environment Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command=r"""!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<=$finish; $i++) {
+> load timestep=$i
+EXPORT:
+Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\user_files\smoke_sample\export_$i.csv
+END
+>export
+!}""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /DATA READER/CASE:Case smoke_3/BOUNDARY:vent, view=/VIEW:View 1""")
+results1.SendCommand(Command="> autolegend plot=/VOLUME RENDERING:Volume Rendering 1, view=VIEW:View 1")
+results1.SendCommand(Command="""VOLUME RENDERING:Volume Rendering 1
+Apply Instancing Transform = On
+Apply Texture = On
+Blend Texture = On
+Colour = 0.75, 0.75, 0.75
+Colour Map = Default Colour Map
+Colour Mode = Variable
+Colour Scale = Linear
+Colour Variable = odor
+Colour Variable Boundary Values = Hybrid
+Culling Mode = No Culling
+Domain List = /DOMAIN GROUP:All Domains
+Draw Faces = On
+Draw Lines = Off
+Instancing Transform = /DEFAULT INSTANCE TRANSFORM:Default Transform
+Lighting = Off
+Max = 0.0 [kg m^-3]
+Min = 0.0 [kg m^-3]
+Range = Global
+Specular Lighting = Off
+Surface Drawing = Smooth Shading
+Texture Angle = 0
+Texture Direction = 0 , 1 , 0 
+Texture File =  
+Texture Material = White Metal
+Texture Position = 0 , 0 
+Texture Scale = 1
+Texture Type = Predefined
+Tile Texture = Off
+Transform Texture = Off
+Transparency = 0.2
+Transparency Colour Map = Transparency
+Variable = odor
+Variable Boundary Values = Hybrid
+Volume Rendering Max = 0.0 [kg m^-3]
+Volume Rendering Min = 0.0 [kg m^-3]
+Volume Rendering Range = Global
+Volume Rendering Scale = Linear
+Volume Resolution = 100
+  OBJECT VIEW TRANSFORM:
+  Apply Reflection = Off
+  Apply Rotation = Off
+  Apply Scale = Off
+  Apply Translation = Off
+  Principal Axis = Z
+  Reflection Plane Option = XY Plane
+  Rotation Angle = 0.0 [degree]
+  Rotation Axis From = 0 [m], 0 [m], 0 [m]
+  Rotation Axis To = 0 [m], 0 [m], 0 [m]
+  Rotation Axis Type = Principal Axis
+  Scale Vector = 1 , 1 , 1 
+  Translation Vector = 0 [m], 0 [m], 0 [m]
+  X = 0.0 [m]
+  Y = 0.0 [m]
+  Z = 0.0 [m]
+  END
+END""")
+results1.SendCommand(Command="""# Sending visibility action from ViewUtilities
+>show /VOLUME RENDERING:Volume Rendering 1, view=/VIEW:View 1""")
+results1.SendCommand(Command=r"""DATA READER:
+  Active Case Name = Case smoke_3
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3_001.res
+  Master Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3_001.res
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END""")
+results1.SendCommand(Command="> load timestep=235")
+results1.SendCommand(Command="> load timestep=193")
+results1.SendCommand(Command="> load timestep=179")
+results1.SendCommand(Command="> load timestep=230")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.227273
+    Pan = 0, 0
+    Rotation Quaternion = -4.32978e-17, 0.707107, 0.707107, 4.32978e-17
+    
+  END
+
+END
+
+> update
+> load timestep=231""")
+results1.SendCommand(Command="""ANIMATION:ANIMATION
+QAnim MPEG Filename = C:/Users/Muphy/Documents/smoke_3.wmv
+QAnim Save MPEG = Off
+QAnim Looping = Bounce
+QAnim Looping Cycles = 1
+Video Format = wmv
+
+END""")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case smoke_3
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = C:/Users/Muphy/Documents/smoke_3.wmv
+TimeAnim Save MPEG = Off
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END
+>animate timestepAnimate""")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.279848, -0.364705, -0.115917, 0.880476
+    
+  END
+
+END
+
+> update
+> load timestep=220""")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.227273
+    Pan = 0, 0
+    Rotation Quaternion = -4.32978e-17, 0.707107, 0.707107, 4.32978e-17
+    
+  END
+
+END
+
+> update
+DATA READER:
+Timestep Match Criterion = Same Step
+Timestep Sync Mode = By Time Value
+Timevalue Match Criterion = Same Value
+END
+ANIMATION: ANIMATION
+TimeAnim Control Case = Case smoke_3
+TimeAnim Control Variable = Timestep
+TimeAnim Frame Interval = All Timesteps
+TimeAnim Frame Spacing = Equal In Time
+TimeAnim Number Of Frames = 21
+TimeAnim Timestep Interval = 1
+TimeAnim Specify Range = Off
+TimeAnim MPEG Filename = C:/Users/Muphy/Documents/smoke_3.wmv
+TimeAnim Save MPEG = Off
+TimeAnim Looping Cycles = 1
+Video Format = wmv
+END
+>animate timestepAnimate""")
+results1.Exit()
+results1.Edit()
+results1.Exit()
+Save(Overwrite=True)

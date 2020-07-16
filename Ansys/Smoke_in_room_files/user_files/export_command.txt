@@ -1,0 +1,9 @@
+!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<=$finish; $i++) {
+> load timestep=$i
+EXPORT:
+Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\user_files\smoke_1\$i.csv
+END
+>export
+!}

@@ -1,0 +1,239 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+system1 = GetSystem(Name="CFX")
+results1 = system1.GetContainer(ComponentName="Results")
+results1.Edit()
+results1.Exit()
+system2 = GetSystem(Name="CFX 2")
+results2 = system2.GetContainer(ComponentName="Results")
+results2.Edit()
+results2.Exit()
+results1.Edit()
+results1.SendCommand(Command="""VIEW:View 1
+  Light Angle = 50, 110
+END
+
+VIEW:View 2
+  Light Angle = 50, 110
+END
+
+VIEW:View 3
+  Light Angle = 50, 110
+END
+
+VIEW:View 4
+  Light Angle = 50, 110
+END
+
+> update
+EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_1
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export_300.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = environment
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command=r"""!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<=$finish; $i++) {
+> load timestep=$i
+EXPORT:
+Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\user_files\smoke_1\$i.csv
+END
+>export
+!}""")
+results1.Exit()
+system3 = GetSystem(Name="CFX 1")
+results3 = system3.GetContainer(ComponentName="Results")
+results3.Edit()
+results3.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_2
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export_300.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = environment
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results3.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_2
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export_300.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = environment
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results3.SendCommand(Command=r"""!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<=$finish; $i++) {
+> load timestep=$i
+EXPORT:
+Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\user_files\smoke_2\$i.csv
+END
+>export
+!}""")
+results3.Exit()
+results2.Edit()
+results2.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_3
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export_300.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = environment Default
+Location List = environment
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results2.SendCommand(Command="""EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_3
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = D:/workplace/projects/Ansys/Smoke/Smoke_in_room_files/user_files/export_300.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = environment Default
+Location List = environment
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results2.SendCommand(Command=r"""!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<=$finish; $i++) {
+> load timestep=$i
+EXPORT:
+Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\user_files\smoke_3\$i.csv
+END
+>export
+!}""")
+results2.Exit()
+Save(Overwrite=True)
