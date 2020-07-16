@@ -8,6 +8,8 @@ TagManager:
   - inner radius
   - outward radius
   - projectile
+  - FxTemporaire
+  - eyes
   layers:
   - Default
   - TransparentFX
