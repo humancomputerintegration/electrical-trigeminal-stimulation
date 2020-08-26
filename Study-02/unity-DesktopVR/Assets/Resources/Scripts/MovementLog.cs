@@ -1,5 +1,5 @@
 ﻿/*
- * By: Jingxuan Wen (comments by Jas Brooks)
+ * By: Jingxuan Wen, Jas Brooks
  */
 
 using System.Collections;
@@ -8,10 +8,10 @@ using UnityEngine;
 using System;
 using System.IO;
 
-public class Movement : MonoBehaviour
+public class MovementLog : MonoBehaviour
 {
     public GameObject Target = null;
-    public int LoggingTimeInterval = 10; // Currently, this is set up to be every 10 frames. Change to a certain number of milliseconds.
+    public int LoggingTimeInterval = 10; // Milliseconds.
     public string ParticipantNumber = "Jingxuan";
     public string SaveLogFileTo = "C:\\Users\\The Lab\\Desktop\\ETS test environment\\ETS Test Environment Vol. 0.5\\Movement\\";
 

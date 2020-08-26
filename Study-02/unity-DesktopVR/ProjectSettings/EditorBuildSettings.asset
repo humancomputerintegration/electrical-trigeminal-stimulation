@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Resources/Scenes/ETS Enviroment.unity
+    path: Assets/Resources/Scenes/Virtual Condition.unity
     guid: 09c7597a61ec84040849b14a93aed55d
   - enabled: 1
     path: Assets/Resources/Scenes/Menu.unity

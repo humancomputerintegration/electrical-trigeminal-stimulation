@@ -27,10 +27,11 @@ public class Unity_Client_2 : MonoBehaviour
     private bool calibrated = false; // by default, it is not calibrated.
     public static float IntensityFactorLeft = 1.0f; // the intensity factor of left side
     public static float IntensityFactorRight = 1.0f; // the intensity factor of right side
-     /*
-      * PYTHON SERVER COMMUNICATION.
-      * brief: for communicating with the RehaMove system via Python script over a server.
-      */
+
+    /*
+     * PYTHON SERVER COMMUNICATION.
+     * Brief: for communicating with the RehaMove system via Python script over a server.
+     */
     [Header("OSC Settings")]
     public string outIP    = "127.0.0.1";
     public int outPort     = 9001;
@@ -47,25 +48,31 @@ public class Unity_Client_2 : MonoBehaviour
         ETS_On = settings.ETSMode;
         Radius = settings.RadiusMode;
 
-        // init OSC
-        OSCHandler.Instance.Init(); 
-
-         // Initialize OSC clients (transmitters)
-        OSCHandler.Instance.CreateClient("myClient", IPAddress.Parse(outIP), outPort);
-        
-         // Initialize OSC servers (listeners)
-        myServer = OSCHandler.Instance.CreateServer("myServer", inPort);
-
-         // Set buffer size (bytes) of the server (default 1024)
-        myServer.ReceiveBufferSize = 1024;
-
-         // Set the sleeping time of the thread (default 10)
-        myServer.SleepMilliseconds = 10;
+        InitializeOSC();
 
         for (int i = 0; i < 5; i++) visit[i] = false;
     }
 
+    void InitializeOSC()
+    {
+        // Initialize OSC
+        OSCHandler.Instance.Init();
+
+        // Initialize OSC clients (transmitters)
+        OSCHandler.Instance.CreateClient("myClient", IPAddress.Parse(outIP), outPort);
+
+        // Initialize OSC servers (listeners)
+        myServer = OSCHandler.Instance.CreateServer("myServer", inPort);
+
+        // Set buffer size (bytes) of the server (default 1024)
+        myServer.ReceiveBufferSize = 1024;
+
+        // Set the sleeping time of the thread (default 10)
+        myServer.SleepMilliseconds = 10;
+    }
+
     // Update is called once per frame
+    // To-do: rework this to be at a set of milliseconds
     void Update()
     {
         if (!inZone) return;
