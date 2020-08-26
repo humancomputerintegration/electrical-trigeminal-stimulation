@@ -4,11 +4,10 @@ This is a repository for the prototype electrical trigeminal stimulator and acco
 
 ## Repository Structure
 
-* `cpp-Study01-RehaMove` contains all the C files to run the paper's first user study. To run the study, you would need a RehaMove. This builds off of the [Rehamove Integration Library](https://github.com/humancomputerintegration/rehamove-integration-lib).
-* `unity-Study02-DesktopVR` contains all the Unity files to run the paper's second user study. The code features thorough comments and further explanation below. To actually run the study, you would need a RehaMove.
-* `ansys-Study02-Simulation` contains all Ansys files to run the computational fluid simulation for the paper's second user study.
-* `rehamove-adapter` contains 3D printing files and instructions to make a nose clip adapter for the RehaMove.
-* `stimulator` contains the schematics, 3D printing files, bill of materials, and instructions to assemble the electrical trigeminal stimulator.
+* `Study-01` contains all the C files to run the paper's first user study. To run the study, you would need a RehaMove. This builds off of the [Rehamove Integration Library](https://github.com/humancomputerintegration/rehamove-integration-lib).
+* `Study-02` contains all the Unity files to run the paper's second user study. The code features thorough comments and further explanation below. To actually run the study, you would need a RehaMove 3, Unity 3D (2018.4.17f1), Python, and ANSYS.
+* `rehamove-adapter` contains 3D printing files and instructions to make a nose clip adapter for the RehaMove 3.
+* `wearable-device` contains the schematics, 3D printing files, bill of materials, and instructions to assemble the electrical trigeminal stimulator.
 
 ## Device
 
@@ -43,4 +42,3 @@ $$
 ## Licensing & Citing
 
 This documentation describes Open Hardware under the GNU  General Public License v3.0 as well as Open Source Software under the <Final License> License. When using or building upon this device in  an academic publication, please consider citing as follows:
-
