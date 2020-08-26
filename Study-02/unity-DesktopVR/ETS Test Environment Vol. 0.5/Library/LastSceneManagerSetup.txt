@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/Collider_test_nonVR.unity
-  isLoaded: 1
-  isActive: 1
