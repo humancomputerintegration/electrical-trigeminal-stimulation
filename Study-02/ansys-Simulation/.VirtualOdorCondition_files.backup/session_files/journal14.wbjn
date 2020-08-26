@@ -1,0 +1,8 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+system1 = GetSystem(Name="CFX")
+setup1 = system1.GetContainer(ComponentName="Setup")
+setup1.Edit()
+setup1.Exit()
+Save(Overwrite=True)
