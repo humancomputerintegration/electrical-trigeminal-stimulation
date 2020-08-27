@@ -16,11 +16,11 @@ This is a repository for the prototype electrical trigeminal stimulator and acco
 
 
 
-## User Study 01: Electrical Lateralization
+## User Study 01: Intensity & Lateralization
 
 Explain the code here.
 
-## User Study 02: Real versus Virtual Odor Field
+## User Study 02: Real versus Virtual Odor Navigation
 
 ### Environment
 

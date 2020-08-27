@@ -81,45 +81,7 @@ if __name__ == "__main__":
     dispatcher.map("/stimulation_S", stimulate_by_side, "dummy")
     dispatcher.map("/stimulation_R", stimulate_by_radius, "dummy")
 
-    # Calibration ##TODO
-    if (calibrationMode):
-        print('\nWe are going to adjust the intensity of the stimulation in the test')
-        while (True):
-            print('\ncurrent intensity is Level ' + str(bias))
-            nextOrder = input("To increase the intensity, please enter 'i'.\nTo decrease the intensity, please enter 'd'.\nTo test the current level, please enter 't'\nTo confirm the calibration, please enter 'c'\n")
-            if (nextOrder == 'i'):
-                if (bias == 5):
-                    print('Already maximum level')
-                    continue
-                bias = bias + 1
-            elif (nextOrder == 'd'):
-                if (bias == 0):
-                    print('Already minimum levle')
-                    continue
-                bias = bias - 1
-            elif (nextOrder == 't'):
-                print('\nUpper limit of stimulations: ')
-                time.sleep(1)
-                for i in range(5):
-                    r.custom_pulse(currentChannel, [(1 + 0.1 * bias, 100), (-1 - 0.1 * bias, 100)])
-                    time.sleep(0.01)
-                print('\nLower limit of stimulations: ')
-                time.sleep(1)
-                for i in range(5):
-                    r.custom_pulse(currentChannel, [(0.1 * bias, 100), (-0.1 * bias, 100)])
-                    time.sleep(0.01)
-            elif (nextOrder == 'c'):
-                confirm = input("Confirm and continue? Please enter 'Y' for yes, 'N' for no.\n")
-                if (confirm == 'Y'):
-                    break
-                else:
-                    print('Not confirmed, calibration will continue.')
-                    continue
-            else:
-                print('invalid order')
-                continue
-    
     # Server
     server = osc_server.ThreadingOSCUDPServer((args.ip, args.port), dispatcher)
-    print('Serving on {}'.format( server.server_address))
+    print('Serving on {}'.format(server.server_address))
     server.serve_forever()
