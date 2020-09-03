@@ -121,6 +121,7 @@ public class NoseManager : MonoBehaviour
             }
 
             double totalConcentration = (double)(left + right);
+            Debug.Log(totalConcentration);
 
             if (totalConcentration < detectionThreshold_kgmc)
             {
@@ -131,12 +132,12 @@ public class NoseManager : MonoBehaviour
                 float totalIntensity = ConcentrationToIntensity(totalConcentration);
                 if (left < right) // Right stimulation
                 {
-                    latViz.localPosition = new Vector3(0.0f, 0.0f, -0.2f);
+                    latViz.localPosition = new Vector3(0.0f, 0.0f, 0.2f);
                     message = "l " + totalIntensity.ToString();
                 }
                 else if (right < left) // Left stimulation
                 {
-                    latViz.localPosition = new Vector3(0.0f, 0.0f, 0.2f);
+                    latViz.localPosition = new Vector3(0.0f, 0.0f, -0.2f);
                     message = "r " + totalIntensity.ToString();
                 }
                 else // Middle stimulation
