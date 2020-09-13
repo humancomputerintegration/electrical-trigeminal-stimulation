@@ -17,11 +17,11 @@ namespace Valve.VR
     public class SteamVR_Input_ActionSet_ETS : Valve.VR.SteamVR_ActionSet
     {
         
-        public virtual SteamVR_Action_Boolean CalibrationMenu
+        public virtual SteamVR_Action_Boolean DeclareLoc
         {
             get
             {
-                return SteamVR_Actions.eTS_CalibrationMenu;
+                return SteamVR_Actions.eTS_DeclareLoc;
             }
         }
     }

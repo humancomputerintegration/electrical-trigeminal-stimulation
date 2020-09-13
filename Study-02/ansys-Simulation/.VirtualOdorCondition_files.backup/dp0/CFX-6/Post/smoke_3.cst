@@ -1,4 +1,4 @@
-# State file created:  2020/07/05 01:17:53
+# State file created:  2020/07/05 01:42:11
 # CFX-20.1
 
 COMMENT:User Data
@@ -7,18 +7,18 @@ COMMENT:User Data
   Heading Level = 1
 END
 DATA READER:
-  Active Case Name = Case smoke_1
+  Active Case Name = Case smoke_3
   Append Results = True
   Apply X Offset = false
   Apply Y Offset = false
   Apply Z Offset = false
   Clear All Objects = False
   Construct Variables From Fourier Coefficients = True
-  Current Case List = Case smoke_1
+  Current Case List = Case smoke_3
   Current Case Name = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\\
-dp0\CFX-4\CFX\smoke_1_001.res
+dp0\CFX-6\CFX\smoke_3_001.res
   Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\\
-dp0\CFX-4\CFX\smoke_1_001.res
+dp0\CFX-6\CFX\smoke_3_001.res
   Current Timestep = -1
   Current Timevalue = 300
   Edit Case Names = false
@@ -44,12 +44,12 @@ dp0\CFX-4\CFX\smoke_1_001.res
   Timestep Match Criterion = Same Step
   Timestep Sync Mode = By Time Value
   Timevalue Match Criterion = Same Value
-  CASE:Case smoke_1
+  CASE:Case smoke_3
     Construct Variables From Fourier Coefficients = True
     Current Case Name = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\\
-dp0\CFX-4\CFX\smoke_1_001.res
+dp0\CFX-6\CFX\smoke_3_001.res
     Current Results File = D:\workplace\projects\Ansys\Smoke\\
-Smoke_in_room_files\dp0\CFX-4\CFX\smoke_1_001.res
+Smoke_in_room_files\dp0\CFX-6\CFX\smoke_3_001.res
     Current Timestep = 300
     Current Timevalue = 300
     File Angle Units = rad
@@ -64,6 +64,38 @@ Smoke_in_room_files\dp0\CFX-4\CFX\smoke_1_001.res
     File Time Units = s
     Multi Configuration File Load Option = Last Case
     Workbench ID = 1
+    BOUNDARY:environment Default
+      Apply Instancing Transform = On
+      Apply Texture = Off
+      Blend Texture = On
+      Colour = 0.2, 0.5, 1
+      Colour Map = Default Colour Map
+      Colour Mode = Constant
+      Colour Scale = Linear
+      Colour Variable Boundary Values = Hybrid
+      Culling Mode = No Culling
+      Draw Faces = On
+      Draw Lines = Off
+      Instancing Transform = Default Transform
+      Lighting = true
+      Line Colour = 0, 0, 0
+      Line Colour Mode = Default
+      Line Width = 1
+      Range = Global
+      Render Edge Angle = 0 [degree]
+      Specular Lighting = On
+      Surface Drawing = Smooth Shading
+      Texture Angle = 0
+      Texture Direction = 0.0, 1.0, 0.0
+      Texture Material = Metal
+      Texture Position = 0.0, 0.0
+      Texture Scale = 1.0
+      Texture Type = Predefined
+      Tile Texture = Off
+      Transform Texture = Off
+      Transparency = 0.0
+      Visibility = Off
+    END
     BOUNDARY:person Default
       Apply Instancing Transform = On
       Apply Texture = Off
@@ -96,38 +128,6 @@ Smoke_in_room_files\dp0\CFX-4\CFX\smoke_1_001.res
       Transparency = 0.0
       Visibility = On
     END
-    BOUNDARY:room
-      Apply Instancing Transform = On
-      Apply Texture = Off
-      Blend Texture = On
-      Colour = 0.2, 0.5, 1
-      Colour Map = Default Colour Map
-      Colour Mode = Constant
-      Colour Scale = Linear
-      Colour Variable Boundary Values = Hybrid
-      Culling Mode = No Culling
-      Draw Faces = On
-      Draw Lines = Off
-      Instancing Transform = Default Transform
-      Lighting = true
-      Line Colour = 0, 0, 0
-      Line Colour Mode = Default
-      Line Width = 1
-      Range = Global
-      Render Edge Angle = 0 [degree]
-      Specular Lighting = On
-      Surface Drawing = Smooth Shading
-      Texture Angle = 0
-      Texture Direction = 0.0, 1.0, 0.0
-      Texture Material = Metal
-      Texture Position = 0.0, 0.0
-      Texture Scale = 1.0
-      Texture Type = Predefined
-      Tile Texture = Off
-      Transform Texture = Off
-      Transparency = 0.0
-      Visibility = false
-    END
     BOUNDARY:vent
       Apply Instancing Transform = On
       Apply Texture = Off
@@ -158,7 +158,7 @@ Smoke_in_room_files\dp0\CFX-4\CFX\smoke_1_001.res
       Tile Texture = Off
       Transform Texture = Off
       Transparency = 0.0
-      Visibility = false
+      Visibility = On
     END
     COMPOSITE:Assembly
       Apply Instancing Transform = On
@@ -812,7 +812,7 @@ DEFAULT LEGEND:Default Legend View 1
   Text Colour Mode = Default
   Text Height = 0.024
   Text Rotation = 0
-  Visibility = On
+  Visibility = Off
 END
 DEFAULT LEGEND:Default Legend View 2
   Colour = 0, 0, 0
@@ -895,13 +895,13 @@ EXPORT:
   ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
   BC Profile Type = Inlet Velocity
   CSV Type = CSV
-  Case Name = Case smoke_1
+  Case Name = Case smoke_3
   Case Summary Format = XML
   Case Summary Type = ANSYS FSI
   Export Connectivity = Off
   Export Coord Frame = Global
   Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\\
-user_files\smoke_1\300.csv
+user_files\smoke_3\300.csv
   Export Geometry = On
   Export Node Numbers = Off
   Export Null Data = On
@@ -912,7 +912,7 @@ user_files\smoke_1\300.csv
   Heat Flow Sign Flipping = Automatic
   Include File Information = Off
   Include Header = On
-  Location = person Default
+  Location = environment Default
   Location List = environment
   Null Token = null
   Overwrite = On
@@ -953,6 +953,7 @@ MASS FLOW CALC OPTION ON PHYSICAL SURFACES:
   Option = Interpolated
 END
 REPORT:
+  Excluded Report Items = /TITLE PAGE
   Report Items = /TITLE PAGE,/REPORT/FILE INFORMATION OPTIONS,/REPORT/MESH \
 STATISTICS OPTIONS,/REPORT/PHYSICS SUMMARY OPTIONS,/REPORT/SOLUTION SUMMARY \
 OPTIONS,/REPORT/OPERATING MAPS,/COMMENT:User Data
@@ -1347,7 +1348,6 @@ SCALAR VARIABLE:Z
 END
 SCALAR VARIABLE:odor
   Boundary Values = Conservative
-  User Units = kg m^-3
 END
 SCALAR VARIABLE:odor.Specific
   Boundary Values = Conservative
@@ -1538,33 +1538,6 @@ END
 VECTOR VARIABLE:odor.Specific.Gradient
   Boundary Values = Conservative
 END
-VIEW:Turbo Initialisation View
-  Angular Coord Shift = 0.0
-  Auto Center = false
-  Axis Visibility = true
-  Border Visibility = false
-  Camera Mode = User Specified
-  Clip Scene = false
-  Coord Transform = Cartesian
-  Hide Difference Case = false
-  Highlight Type = Surface Mesh
-  Is A Figure = false
-  Light Angle = 50, 110
-  Object Visibility List = /WIREFRAME:Wireframe
-  Projection = Orthographic
-  Ruler Visibility = true
-  Standard View = Isometric Y
-  Valid Case = All Cases
-  CAMERA:
-    Option = Pivot Point and Quaternion
-    Pan = 0,0
-    Pivot Point = 0,1.75,0
-    Rotation = -90, 0, 0
-    Rotation Quaternion = 0.279848,-0.364705,-0.115917,0.880476
-    Scale = 0.164949
-    Send To Viewer = True
-  END
-END
 VIEW:View 1
   Angular Coord Shift = 0.0
   Auto Center = false
@@ -1577,9 +1550,9 @@ VIEW:View 1
   Highlight Type = Surface Mesh
   Is A Figure = false
   Light Angle = 50, 110
-  Object Visibility List = /DATA READER/CASE:Case smoke_1/BOUNDARY:person \
-Default,/DEFAULT LEGEND:Default Legend View 1,/VOLUME RENDERING:Volume Rendering \
-1,/WIREFRAME:Wireframe
+  Object Visibility List = /DATA READER/CASE:Case smoke_3/BOUNDARY:person \
+Default,/DATA READER/CASE:Case smoke_3/BOUNDARY:vent,/DEFAULT LEGEND:Default \
+Legend View 1,/VOLUME RENDERING:Volume Rendering 1,/WIREFRAME:Wireframe
   Projection = Orthographic
   Ruler Visibility = true
   Standard View = Isometric Y
@@ -1698,7 +1671,7 @@ VIEWPORT MANAGER:
 END
 VOLUME RENDERING:Volume Rendering 1
   Apply Instancing Transform = On
-  Apply Texture = Off
+  Apply Texture = On
   Blend Texture = On
   Clip Planes = On
   Colour = 0.75, 0.75, 0.75
@@ -1769,5 +1742,5 @@ WIREFRAME:Wireframe
   Line Colour Mode = Default
   Line Width = 1
   Show Surface Mesh = Off
-  Visibility = On
+  Visibility = Off
 END

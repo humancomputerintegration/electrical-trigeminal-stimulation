@@ -1,0 +1,115 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+system1 = GetSystem(Name="CFX")
+results1 = system1.GetContainer(ComponentName="Results")
+results1.Edit()
+geometry1 = system1.GetContainer(ComponentName="Geometry")
+geometry1.Edit()
+geometry1.Edit()
+geometry1.Exit()
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.14572
+    Pan = 0, 0
+    Rotation Quaternion = 0.029551, 0.159633, 0.00732825, 0.9867
+    
+  END
+
+END
+
+VIEW:View 1
+  Light Angle = 50, 110
+END
+
+VIEW:View 2
+  Light Angle = 50, 110
+END
+
+VIEW:View 3
+  Light Angle = 50, 110
+END
+
+VIEW:View 4
+  Light Angle = 50, 110
+END
+
+> update
+HARDCOPY:
+Antialiasing = On
+Hardcopy Filename = C:/Users/The Lab/Documents/CFD_Simulation01.png
+Hardcopy Format = png
+Hardcopy Tolerance = 0.0001
+Image Height = 1080
+Image Scale = 100
+Image Width = 2000
+JPEG Image Quality = 80
+Screen Capture = Off
+Use Screen Size = Off
+White Background = On
+END
+>print""")
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.177546
+    Pan = 0, 0
+    Rotation Quaternion = 0.0521453, 0.185225, 0.00877841, 0.981266
+    
+  END
+
+END
+
+> update
+HARDCOPY:
+Antialiasing = On
+Hardcopy Filename = C:/Users/The Lab/Documents/CFD_Simulation02.ps
+Hardcopy Format = ps
+Hardcopy Tolerance = 0.0001
+Image Height = 1080
+Image Scale = 100
+Image Width = 2000
+JPEG Image Quality = 80
+Screen Capture = Off
+Use Screen Size = Off
+White Background = On
+END
+>print""")
+results1.SendCommand(Command="""HARDCOPY:
+Antialiasing = On
+Hardcopy Filename = C:/Users/The Lab/Documents/CFD_Simulation03.png
+Hardcopy Format = png
+Hardcopy Tolerance = 0.0001
+Image Height = 1080
+Image Scale = 100
+Image Width = 1920
+JPEG Image Quality = 80
+Screen Capture = Off
+Use Screen Size = Off
+White Background = On
+END
+>print""")
+results1.Exit()
+setup1 = system1.GetContainer(ComponentName="Setup")
+setup1.Edit()
+setup1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.4514, 0
+    Scale = 0.227273
+    Pan = 0, 0
+    Rotation Quaternion = -0.0522684, 0.474486, 0.231854, 0.84757
+    
+  END
+
+END
+
+> update
+>rename from=/LIBRARY/ADDITIONAL VARIABLE:odor,to=menthol""")
+setup1.SendCommand(Command="> undo")

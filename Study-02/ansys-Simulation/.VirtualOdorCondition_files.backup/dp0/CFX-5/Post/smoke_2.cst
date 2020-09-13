@@ -1,4 +1,4 @@
-# State file created:  2020/09/13 11:42:56
+# State file created:  2020/07/05 01:25:19
 # CFX-20.1
 
 COMMENT:User Data
@@ -15,14 +15,12 @@ DATA READER:
   Clear All Objects = False
   Construct Variables From Fourier Coefficients = True
   Current Case List = Case smoke_2
-  Current Case Name = C:\Users\The Lab\Documents\Jas\electrical-trigeminal-\
-stimulation\Study-02\ansys-Simulation\VirtualOdorCondition_files\dp0\CFX-5\CFX\\
-smoke_2_001.res
-  Current Results File = C:\Users\The Lab\Documents\Jas\electrical-trigeminal-\
-stimulation\Study-02\ansys-Simulation\VirtualOdorCondition_files\dp0\CFX-5\CFX\\
-smoke_2_001.res
+  Current Case Name = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\\
+dp0\CFX-5\CFX\smoke_2_001.res
+  Current Results File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\\
+dp0\CFX-5\CFX\smoke_2_001.res
   Current Timestep = -1
-  Current Timevalue = 299
+  Current Timevalue = 300
   Edit Case Names = false
   File Angle Units = rad
   File Chemical Amount Units = mol
@@ -48,14 +46,12 @@ smoke_2_001.res
   Timevalue Match Criterion = Same Value
   CASE:Case smoke_2
     Construct Variables From Fourier Coefficients = True
-    Current Case Name = C:\Users\The Lab\Documents\Jas\electrical-trigeminal-\
-stimulation\Study-02\ansys-Simulation\VirtualOdorCondition_files\dp0\CFX-5\CFX\\
-smoke_2_001.res
-    Current Results File = C:\Users\The Lab\Documents\Jas\electrical-\
-trigeminal-stimulation\Study-02\ansys-Simulation\VirtualOdorCondition_files\dp0\\
-CFX-5\CFX\smoke_2_001.res
-    Current Timestep = 299
-    Current Timevalue = 299
+    Current Case Name = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\\
+dp0\CFX-5\CFX\smoke_2_001.res
+    Current Results File = D:\workplace\projects\Ansys\Smoke\\
+Smoke_in_room_files\dp0\CFX-5\CFX\smoke_2_001.res
+    Current Timestep = 300
+    Current Timevalue = 300
     File Angle Units = rad
     File Chemical Amount Units = mol
     File Current Units = A
@@ -904,8 +900,8 @@ EXPORT:
   Case Summary Type = ANSYS FSI
   Export Connectivity = Off
   Export Coord Frame = Global
-  Export File = C:\Users\The Lab\Documents\Jas\electrical-trigeminal-\
-stimulation\Study-02\ansys-python\AnsysProcessing\OdorSimulation02\299.csv
+  Export File = D:\workplace\projects\Ansys\Smoke\Smoke_in_room_files\\
+user_files\smoke_2\300.csv
   Export Geometry = On
   Export Node Numbers = Off
   Export Null Data = On
@@ -917,7 +913,7 @@ stimulation\Study-02\ansys-python\AnsysProcessing\OdorSimulation02\299.csv
   Include File Information = Off
   Include Header = On
   Location = person Default
-  Location List = person Default
+  Location List = environment
   Null Token = null
   Overwrite = On
   Precision = 8
@@ -936,12 +932,12 @@ END
 LIBRARY:
   CEL:
     EXPRESSIONS:
-      Accumulated Time Step = 299
+      Accumulated Time Step = 300
       Concentration = 1[kg m^-3]
-      Current Time Step = 299
+      Current Time Step = 300
       Reference Pressure = 0 [atm]
-      Sequence Step = 299
-      Time = 299 [s]
+      Sequence Step = 300
+      Time = 300 [s]
       atstep = Accumulated Time Step
       ctstep = Current Time Step
       odorControl = t/totalTime*Concentration
@@ -1563,7 +1559,7 @@ RENDERING:Volume Rendering 1,/WIREFRAME:Wireframe
     Pan = 0,0
     Pivot Point = 0,1.75,0
     Rotation = -90, 0, 0
-    Rotation Quaternion = 0.313863,-0.5755,-0.165942,0.736715
+    Rotation Quaternion = 0.279848,-0.364705,-0.115917,0.880476
     Scale = 0.164949
     Send To Viewer = True
   END

@@ -83,7 +83,7 @@
       "requirement": "optional"
     },
     {
-      "name": "/actions/ETS/in/CalibrationMenu",
+      "name": "/actions/ETS/in/DeclareLoc",
       "type": "boolean"
     }
   ],

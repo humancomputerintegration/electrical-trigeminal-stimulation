@@ -1,0 +1,145 @@
+# encoding: utf-8
+# 2020 R1
+SetScriptVersion(Version="20.1.164")
+system1 = GetSystem(Name="CFX 1")
+results1 = system1.GetContainer(ComponentName="Results")
+results1.Edit()
+results1.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.164949
+    Pan = 0, 0
+    Rotation Quaternion = 0.313863, -0.5755, -0.165942, 0.736715
+    
+  END
+
+END
+
+> update
+EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_2
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = C:/Users/The Lab/Documents/Jas/electrical-trigeminal-stimulation/Study-02/ansys-python/AnsysProcessing/OdorSimulation02/300.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = person Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results1.SendCommand(Command=r"""!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<$finish; $i++){
+>load timestep=$i
+EXPORT:
+Export File = C:\Users\The Lab\Documents\Jas\electrical-trigeminal-stimulation\Study-02\ansys-python\AnsysProcessing\OdorSimulation02\$i.csv
+END
+>export
+!}""")
+system2 = GetSystem(Name="CFX 2")
+results2 = system2.GetContainer(ComponentName="Results")
+results2.Edit()
+results2.Exit()
+results1.Exit()
+results2.Edit()
+results2.SendCommand(Command="""VIEW:View 1
+  Camera Mode = User Specified
+  CAMERA:
+    Option = Pivot Point and Quaternion
+    Pivot Point = 0, 1.75, 0
+    Scale = 0.227273
+    Pan = 0, 0
+    Rotation Quaternion = -0.0235871, 0.895397, 0.187148, -0.40334
+    
+  END
+
+END
+
+VIEW:View 1
+  Light Angle = 50, 110
+END
+
+VIEW:View 2
+  Light Angle = 50, 110
+END
+
+VIEW:View 3
+  Light Angle = 50, 110
+END
+
+VIEW:View 4
+  Light Angle = 50, 110
+END
+
+> update
+EXPORT:
+ANSYS Export Data = Element Heat Flux
+ANSYS File Format = ANSYS
+ANSYS Reference Temperature = 0.0 [K]
+ANSYS Specify Reference Temperature = Off
+ANSYS Supplemental HTC = 0.0 [W m^-2 K^-1]
+Additional Variable List =  
+BC Profile Type = Inlet Velocity
+CSV Type = CSV
+Case Name = Case smoke_3
+Export Connectivity = Off
+Export Coord Frame = Global
+Export File = C:/Users/The Lab/Documents/Jas/electrical-trigeminal-stimulation/Study-02/ansys-python/AnsysProcessing/OdorSimulation03/300.csv
+Export Geometry = On
+Export Location Aliases = 
+Export Node Numbers = Off
+Export Null Data = On
+Export Type = Generic
+Export Units System = Current
+Export Variable Type = Current
+External Export Data = None
+Include File Information = Off
+Include Header = On
+Location = environment Default
+Location List = person Default
+Null Token = null
+Overwrite = On
+Precision = 8
+Separator = \", \"
+Spatial Variables = X,Y,Z
+Variable List = odor
+Vector Brackets = ()
+Vector Display = Scalar
+END
+>export""")
+results2.SendCommand(Command=r"""!$start = 0;
+!$finish = 300;
+!for($i=$start; $i<$finish; $i++){
+>load timestep=$i
+EXPORT:
+Export File = C:\Users\The Lab\Documents\Jas\electrical-trigeminal-stimulation\Study-02\ansys-python\AnsysProcessing\OdorSimulation03\$i.csv
+END
+>export
+!}""")
+results2.Exit()

@@ -41,19 +41,19 @@ def binPoint(p):
 # Make a Bounding Volumes folder to store results.
 currDir = os.getcwd()
 mode = 0o666
-resultsFolderName = "AnsysBoundingVolumes"
+resultsFolderName = "AnsysBoundingVolumes03"
 framePath = os.path.join(currDir, resultsFolderName)
 if not os.path.exists(framePath):
 	os.mkdir(framePath)
 
-framesDir = os.path.join(currDir, "AnsysFrames")
+framesDir = os.path.join(currDir, "OdorSimulation03")
 for frame in os.listdir(framesDir):
 	ansysFrame = os.fsdecode(frame)
 	print(ansysFrame)
 
 	boxes = numpy.empty((divisions+1, divisions+1, divisions+1), list)
 
-	with open("AnsysFrames/" + ansysFrame) as ansysData:
+	with open("OdorSimulation03/" + ansysFrame) as ansysData:
 		ansysReader = csv.reader(ansysData, delimiter=",",  quoting=csv.QUOTE_NONNUMERIC)
 		for point in ansysReader:
 			# print(point)
