@@ -31,6 +31,7 @@ public class MovementLog : MonoBehaviour
         bool etsStatus = Nose.activeInHierarchy; // Check if the Nose GameObject is being used.
         string etsTitle = etsStatus ? "_ETSon" : "_ETSoff";
         string filename = SaveLogFileTo + ParticipantNumber + etsTitle + ".txt";
+        Debug.Log(filename);
         sw = new StreamWriter(filename);
         endLine = false;
         sw.WriteLine("Target " + Target.position.ToString("f4"));

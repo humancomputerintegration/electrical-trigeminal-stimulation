@@ -132,13 +132,13 @@ public class NoseManager : MonoBehaviour
                 float totalIntensity = ConcentrationToIntensity(totalConcentration);
                 if (left < right) // Right stimulation
                 {
-                    latViz.localPosition = new Vector3(0.0f, 0.0f, 0.2f);
-                    message = "l " + totalIntensity.ToString();
+                    latViz.localPosition = new Vector3(0.0f, 0.0f, -0.2f);
+                    message = "r " + totalIntensity.ToString();
                 }
                 else if (right < left) // Left stimulation
                 {
-                    latViz.localPosition = new Vector3(0.0f, 0.0f, -0.2f);
-                    message = "r " + totalIntensity.ToString();
+                    latViz.localPosition = new Vector3(0.0f, 0.0f, 0.2f);
+                    message = "l " + totalIntensity.ToString();
                 }
                 else // Middle stimulation
                 {

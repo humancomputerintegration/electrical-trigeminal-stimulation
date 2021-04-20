@@ -1,4 +1,4 @@
-# State file created:  2020/09/13 12:09:02
+# State file created:  2020/09/14 07:26:32
 # CFX-20.1
 
 COMMENT:User Data
@@ -1565,7 +1565,7 @@ Legend View 1,/VOLUME RENDERING:Volume Rendering 1,/WIREFRAME:Wireframe
     Pan = 0,0
     Pivot Point = 0,1.75,0
     Rotation = -90, 0, 0
-    Rotation Quaternion = -0.0235871,0.895397,0.187148,-0.40334
+    Rotation Quaternion = -0.0686604,0.798293,0.101403,-0.589686
     Scale = 0.227273
     Send To Viewer = True
   END
