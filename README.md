@@ -10,7 +10,7 @@ This is a repository for the prototype electrical trigeminal stimulator and acco
   * `ansys-Simulation` all files to run ANSYS simulations for the study.
   * `unity-DesktopVR` all Unity files to run the study. Note, the results from `AnsysProcessing` were omitted due to the file size, so you will have to copy the BVH results to Unity and direct the PlumeManager accordingly.
 * `rehamove-adapter` contains 3D printing file to make a nose clip adapter for the RehaMove 3.
-* `wearable-device` contains the schematics, 3D printing files, and bill of materials to assemble the electrical trigeminal stimulator.
+* `wearable-device` contains the schematic and 3D printing files to assemble the intranasal stimulator.
 
 ## Licensing & Citing
 
